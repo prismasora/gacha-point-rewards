@@ -99,6 +99,10 @@
           <div><small>CHAPTER 01 / 妖狐雷光録</small><b>光狐ヒカリを召喚せよ</b></div>
           <div class="ticket-cost"><svg><use href="#i-ticket"></use></svg><b>1</b><small>/ 1回</small></div>
         </div>
+        <div class="summon-machine" aria-hidden="true"><div class="machine-dome"><span>✦</span><i></i><i></i><i></i></div><div class="machine-base"><b>和幻召喚</b><span class="machine-handle">✦</span><div class="machine-slot"></div></div></div>
+        <div class="summon-caption"><small>SUMMON LIVE / PREVIEW</small><b id="summon-caption">運命のカプセルが、回り出す。</b></div>
+        <div class="summon-collection" aria-label="演出内のコレクション"><span>COLLECTION</span><div></div></div>
+        <div class="summon-controls" aria-label="FV演出操作"><button type="button" data-summon="0" aria-pressed="true">🦊 光狐</button><button type="button" data-summon="1" aria-pressed="false">🐕 狛犬</button><button type="button" data-summon="2" aria-pressed="false">🐈 猫又</button><button type="button" id="summon-pause" aria-label="FV演出を一時停止">Ⅱ</button></div>
       </div>
     </section>
 
@@ -485,6 +489,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon"><svg><use href="#i-check"></use></svg></span><p></p></div>
   <div class="sr-only" id="liveRegion" aria-live="assertive"></div>
+  <script src="summon.js" defer></script>
   <script type="module">
     // Optional Three.js enhancement: the page remains fully functional when WebGL/CDN is unavailable.
     (async () => {
@@ -499,8 +504,8 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         const group = new THREE.Group();
         scene.add(group);
-        const geometry = new THREE.TorusGeometry(2.55, 0.008, 8, 96);
-        const material = new THREE.MeshBasicMaterial({ color: 0xe2b85d, transparent: true, opacity: 0.35 });
+        const geometry = new THREE.TorusGeometry(2.55, 0.035, 8, 96);
+        const material = new THREE.MeshBasicMaterial({ color: 0xe2b85d, transparent: true, opacity: 0.65 });
         group.add(new THREE.Mesh(geometry, material));
         const dots = new THREE.BufferGeometry();
         const positions = new Float32Array(150 * 3);
@@ -515,7 +520,20 @@
         group.add(new THREE.Points(dots, new THREE.PointsMaterial({ color: 0x79d8de, size: 0.035, transparent: true, opacity: 0.75 })));
         const resize = () => { const box = canvas.parentElement.getBoundingClientRect(); renderer.setSize(box.width, box.height, false); camera.aspect = box.width / box.height; camera.updateProjectionMatrix(); };
         resize(); window.addEventListener('resize', resize, { passive: true });
-        const tick = time => { group.rotation.y = time * 0.00008; group.rotation.x = Math.sin(time * 0.0002) * 0.06; renderer.render(scene, camera); requestAnimationFrame(tick); };
+        let burst = 0;
+        canvas.parentElement.addEventListener('summonphase', event => { if (event.detail === 'release') burst = 1; });
+        const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+        const tick = time => {
+          if (!document.hidden && !motionPreference.matches && !canvas.parentElement.classList.contains('summon-paused') && canvas.parentElement.getBoundingClientRect().bottom > 0) {
+            burst *= .96;
+            group.rotation.y += .006 + burst * .035;
+            group.rotation.x = Math.sin(time * 0.0006) * .25;
+            group.scale.setScalar(1 + burst * .25);
+            material.opacity = .55 + burst * .4;
+            renderer.render(scene, camera);
+          }
+          requestAnimationFrame(tick);
+        };
         canvas.classList.add('is-ready'); requestAnimationFrame(tick);
       } catch { canvas.classList.add('is-fallback'); }
     })();

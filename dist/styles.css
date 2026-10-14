@@ -566,6 +566,51 @@ main { width: min(1400px, calc(100% - 48px)); margin: 0 auto; }
 @media (min-width:1001px){
   .japanese-theme .hero-copy h1{font-size:clamp(46px,4.4vw,64px)}
 }
+
+/* Cinematic summon: spin → release → orbit → collection */
+.japanese-stage{--summon-color:#70deed;min-height:590px!important}
+.japanese-stage .hero-musha,.japanese-stage .float-chip-right,.japanese-stage .stage-footer{display:none}
+.japanese-stage .prize-orbit{inset:70px 0 125px!important;transform:none!important}
+.japanese-stage .hero-kitsune{left:49%;right:auto;bottom:0;width:49%;height:100%;transform-origin:50% 80%;transition:filter .4s;z-index:4}
+.japanese-stage .hero-nameplate{left:74%;bottom:-8px;min-width:150px;z-index:6}
+.summon-machine{position:absolute;left:7%;top:30%;width:30%;z-index:3;filter:drop-shadow(0 15px 25px #0008)}
+.machine-dome{position:relative;aspect-ratio:1;border:2px solid #d9be7880;border-radius:50% 50% 35% 35%;background:radial-gradient(circle at 35% 25%,#fff2,transparent 40%),#0c1e30c9;overflow:hidden;box-shadow:inset 0 0 45px #67d6ef33,0 0 30px #67d6ef22}
+.machine-dome>span{position:absolute;left:30%;top:22%;font-size:65px;color:#eccc77;text-shadow:0 0 25px #ebc467}
+.machine-dome i{position:absolute;left:18%;top:60%;width:36px;height:36px;border-radius:50%;background:linear-gradient(#e9c875 50%,#205369 51%);border:1px solid #fff7}
+.machine-dome i:nth-of-type(2){left:65%;top:48%;background:linear-gradient(#db88cf 50%,#4c2756 51%)}
+.machine-dome i:nth-of-type(3){left:50%;top:72%;background:linear-gradient(#73deef 50%,#174554 51%)}
+.machine-base{position:relative;padding:12px;border:1px solid #e8ba6680;border-radius:12px 12px 24px 24px;background:linear-gradient(130deg,#b73a31,#592323);text-align:center}
+.machine-base>b{display:block;color:#f5db91;font-size:12px;letter-spacing:.22em}
+.machine-handle{display:inline-grid;place-items:center;margin:8px;width:42px;height:42px;border:3px solid #e7c276;border-radius:50%;color:#1d1820;background:#e7c276;font-size:25px}
+.machine-slot{width:48%;height:12px;margin:auto;border-radius:10px;background:#170d18;box-shadow:inset 0 3px 6px #000}
+.summon-caption{position:absolute;left:7%;top:19%;z-index:7;display:flex;flex-direction:column;gap:5px}
+.summon-caption small{font-size:8px;letter-spacing:.18em;color:#e8c777}
+.summon-caption b{font-size:15px;color:#fff1d9}
+.summon-controls{position:absolute;z-index:8;bottom:19px;left:7%;right:7%;display:flex;gap:8px}
+.summon-controls button{flex:1;min-height:38px;border:1px solid #d8b96844;border-radius:10px;background:#12121cd9;color:#dfd7c6;font-size:10px;cursor:pointer}
+.summon-controls button[aria-pressed=true]{color:#fbe1a1;border-color:#e4c16a;background:#6c352980}
+.summon-controls #summon-pause{flex:0 0 38px}
+.summon-collection{position:absolute;z-index:6;bottom:73px;left:7%;right:7%;padding:8px 12px;border:1px solid #d5b56833;border-radius:12px;background:#10121fc9}
+.summon-collection>span{display:block;color:#b8a77f;font-size:7px;letter-spacing:.25em}
+.summon-collection>div{display:flex;align-items:center;gap:10px;height:40px}
+.summon-collection img,.summon-collection div>span{width:38px;height:38px;object-fit:contain;opacity:.2;transform:translateY(8px)}
+[data-summon-phase=spin] .machine-dome i{animation:capsule-orbit .8s linear infinite}
+[data-summon-phase=spin] .machine-handle{animation:portal-spin .7s linear infinite}
+[data-summon-phase=spin] .hero-kitsune,[data-summon-phase=release] .hero-nameplate,[data-summon-phase=spin] .hero-nameplate{opacity:0}
+[data-summon-phase=release] .hero-kitsune{animation:character-release 1.6s cubic-bezier(.2,.7,.3,1) both}
+[data-summon-phase=arrive] .hero-kitsune{animation:character-land 2.4s ease both}
+[data-summon-phase=collect] .hero-kitsune{animation:character-alive 3s ease-in-out infinite}
+[data-summon-phase=collect] .summon-collection img,[data-summon-phase=collect] .summon-collection div>span{animation:collection-place .5s ease both}
+.summon-collection div>:nth-child(2){animation-delay:.2s!important}.summon-collection div>:nth-child(3){animation-delay:.4s!important}.summon-collection div>:nth-child(4){animation-delay:.6s!important}.summon-collection div>:nth-child(5){animation-delay:.8s!important}
+[data-summon-phase=release] .machine-dome{box-shadow:inset 0 0 70px var(--summon-color),0 0 60px var(--summon-color)}
+@keyframes capsule-orbit{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(30px,-35px) rotate(90deg)}50%{transform:translate(50px,0) rotate(180deg)}75%{transform:translate(-10px,20px) rotate(270deg)}100%{transform:translate(0,0) rotate(360deg)}}
+@keyframes character-release{0%{opacity:0;transform:translate(-95%,30%) scale(.05) rotate(-30deg)}15%{opacity:1}45%{transform:translate(-60%,-18%) scale(.45) rotate(16deg)}75%{transform:translate(8%,-12%) scale(.85) rotate(-6deg)}100%{opacity:1;transform:none}}
+@keyframes character-land{0%{transform:translateY(-12px) scale(1.03)}22%{transform:translateY(10px) scale(1.04,.94);filter:drop-shadow(0 0 30px var(--summon-color))}48%{transform:translateY(-7px) scale(.98,1.02)}100%{transform:none}}
+@keyframes character-alive{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+@keyframes collection-place{0%{opacity:0;transform:translate(30px,-40px) scale(.5)}70%{transform:translateY(3px) scale(1.1)}100%{opacity:1;transform:none}}
+.summon-paused *{animation-play-state:paused!important}
+@media(max-width:600px){.japanese-stage{min-height:490px!important}.summon-caption b{font-size:12px}.summon-machine{top:35%;left:5%;width:32%}.machine-dome>span{font-size:35px}.machine-dome i{width:24px;height:24px}.machine-base{padding:7px}.machine-base>b{font-size:8px}.machine-handle{width:30px;height:30px;font-size:17px}.japanese-stage .hero-kitsune{left:40%;width:62%;height:86%;bottom:0}.japanese-stage .hero-nameplate{left:70%;min-width:120px}.summon-controls{left:5%;right:5%}.summon-controls button{font-size:9px}.summon-collection{left:5%;right:5%}.summon-caption{left:5%}}
+@media(prefers-reduced-motion:reduce){.japanese-stage [class]{animation:none!important}.japanese-stage .hero-kitsune{opacity:1}.summon-collection img,.summon-collection div>span{opacity:1;transform:none}}
 @media (max-width:1000px){
   .japanese-stage .prize-orbit{inset:60px 35px 68px}
   .hero-musha{left:10%;width:43%}.hero-kitsune{right:4%;width:50%}
