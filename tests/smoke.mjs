@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:4173/';
+const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:4173/?preview=1';
 const cdpHost = process.env.CDP_HOST || 'http://127.0.0.1:9223';
 const storageKey = 'neon-ticket-demo-v2';
 const failures = [];
@@ -193,6 +193,14 @@ async function main() {
   assert(await evaluate(`document.title === 'NEON TICKET | 和幻コレクションWEBガチャ'`), 'page title and app boot');
   assert(state.balance === 320 && state.inventory.length === 2, 'baseline balance and inventory');
   assert(state.campaigns.neon.remaining === 840 && state.campaigns.retro.remaining === 180 && state.campaigns.last.remaining === 3, 'baseline campaign stock');
+  assert(await evaluate(`document.querySelectorAll('[data-summon]').length === 5 && document.querySelectorAll('[data-campaign-card]').length === 5`), 'five guardians have selectable scenes and draw campaigns');
+  for (const [index, realm] of [[2, 'moon'], [3, 'sun'], [4, 'ocean']]) {
+    await click(`[data-summon="${index}"]`);
+    assert(await evaluate(`document.querySelector('.japanese-stage').dataset.realm === '${realm}' && document.querySelector('[data-summon="${index}"]').getAttribute('aria-pressed') === 'true'`), `${realm} selection updates scene and selected state`);
+  }
+  await click('#summon-pause');
+  assert(await evaluate(`document.querySelector('.japanese-stage').classList.contains('summon-paused')`), 'hero animation pause is functional');
+  await click('#summon-pause');
   await click('[data-campaign-card="neon"] [data-draw]');
   await waitFor(`document.querySelector('#drawDialog')?.open`);
   assert(await evaluate(`document.querySelectorAll('.js-draw-lineup .draw-lineup-item').length === 4 && document.querySelector('.js-draw-last-note').hidden`), 'standard draw shows rarity-labelled prize lineup');
@@ -202,6 +210,15 @@ async function main() {
   assert(await evaluate(`!document.querySelector('.js-draw-last-note').hidden`), 'last-one draw shows bonus terms');
   await click('#drawDialog [data-close-dialog]');
 
+  for (const key of ['solar', 'ocean']) {
+    await fresh();
+    const before = await readState();
+    await completeDraw(1, `[data-campaign-card="${key}"] [data-draw]`);
+    const after = await readState();
+    assert(after.balance === before.balance - 2 && after.campaigns[key].remaining === before.campaigns[key].remaining - 1 && after.drawHistory[0].campaignKey === key, `${key} draw consumes preview stock and correct tickets`);
+    await click('#drawDialog [data-close-dialog]');
+  }
+  await fresh();
   await click('.js-daily-button');
   await click('[data-open-ad]');
   await waitFor(`!document.querySelector('.js-ad-complete').disabled`, 6000);

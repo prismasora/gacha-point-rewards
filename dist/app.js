@@ -4,11 +4,21 @@
   const STORAGE_KEY = 'neon-ticket-demo-v2';
   const CHANNEL_NAME = 'neon-ticket-demo-sync';
   const MEMBER_ID = 'NT-0284';
+  const production = window.NTBackend.production;
+  let serverAdmin = false;
+  let adminRequests = null;
+  let adminDraws = null;
+  let drawRequestKey = null;
+  let accountSync = Promise.resolve();
+  let sessionRevision = 0;
+  let adminGrantKey = null;
 
   const campaigns = {
     neon: { name: '妖狐雷光録', cost: 1, total: 1000, pool: ['neonSSR', 'neonSR', 'neonR1', 'neonR2', 'neonN1', 'neonN2', 'neonN3'] },
     retro: { name: '雷光狛犬絵巻', cost: 3, total: 300, pool: ['retroSSR', 'retroSR', 'retroR1', 'retroR2', 'retroN1', 'retroN2', 'retroN3'] },
-    last: { name: '月影猫又絵巻', cost: 2, total: 3, lastOne: true, pool: ['lastSSR', 'lastSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] }
+    last: { name: '月影猫又絵巻', cost: 2, total: 3, lastOne: true, pool: ['lastSSR', 'lastSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] },
+    solar: { name: '暁天鳳凰録', cost: 2, total: 500, pool: ['solarSSR', 'solarSR', 'neonR1', 'neonR2', 'neonN1', 'neonN2', 'neonN3'] },
+    ocean: { name: '蒼海龍絵巻', cost: 2, total: 400, pool: ['oceanSSR', 'oceanSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] }
   };
 
   const prizes = {
@@ -33,7 +43,11 @@
     lastN1: { name: '肉球和柄コースター', rarity: 'N', icon: '🐾' },
     lastN2: { name: '桜香る匂い袋', rarity: 'N', icon: '🌸' },
     lastN3: { name: '猫又絵巻カード', rarity: 'N', icon: '📜' },
-    lastBonus: { name: '黄金狛犬ミニオブジェ', rarity: 'LAST', icon: '🦁' }
+    lastBonus: { name: '黄金狛犬ミニオブジェ', rarity: 'LAST', icon: '🦁' },
+    solarSSR: { name: '暁鳳アカリ・限定フィギュア', rarity: 'SSR', art: 'assets/akari-phoenix.png' },
+    solarSR: { name: '暁の羽根チャーム', rarity: 'SR', icon: '✦' },
+    oceanSSR: { name: '蒼海龍アオイ・限定フィギュア', rarity: 'SSR', art: 'assets/aoi-seadragon.png' },
+    oceanSR: { name: '潮騒の宝珠ライト', rarity: 'SR', icon: '🔷' }
   };
 
   const missionRewards = { daily: 20, ad: 30, survey: 50, app: 40 };
@@ -55,18 +69,20 @@
     const time = initialTimestamp();
     return {
       version: 2,
-      balance: 320,
+      balance: production ? 0 : 320,
       campaigns: {
-        neon: { remaining: 840, active: true, lastOneAwarded: false },
-        retro: { remaining: 180, active: true, lastOneAwarded: false },
-        last: { remaining: 3, active: true, lastOneAwarded: false }
+        neon: { remaining: production ? 0 : 840, active: !production, lastOneAwarded: false },
+        retro: { remaining: production ? 0 : 180, active: !production, lastOneAwarded: false },
+        last: { remaining: production ? 0 : 3, active: !production, lastOneAwarded: false },
+        solar: { remaining: production ? 0 : 500, active: !production, lastOneAwarded: false },
+        ocean: { remaining: production ? 0 : 400, active: !production, lastOneAwarded: false }
       },
       missionClaims: {},
-      inventory: [
+      inventory: production ? [] : [
         { itemId: 'ITEM-DEMO-1', prizeId: 'neonSR', acquiredAt: time, status: '保有中', requestId: null },
         { itemId: 'ITEM-DEMO-2', prizeId: 'neonN2', acquiredAt: time, status: '保有中', requestId: null }
       ],
-      ticketLedger: [{ id: 'LG-DEMO-START', at: time, amount: 320, label: 'デモ初期チケット', type: '付与', balanceAfter: 320 }],
+      ticketLedger: production ? [] : [{ id: 'LG-DEMO-START', at: time, amount: 320, label: 'デモ初期チケット', type: '付与', balanceAfter: 320 }],
       drawHistory: [], exchangeRequests: [], adminAudit: [],
       demoTour: { active: false, current: 0, completed: [] }
     };
@@ -114,6 +130,7 @@
   }
 
   function loadState() {
+    if (production) return createDefaultState();
     try { return validateState(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
     catch { return createDefaultState(); }
   }
@@ -140,17 +157,19 @@
   const liveRegion = document.querySelector('#liveRegion');
 
   try {
-    channel = new BroadcastChannel(CHANNEL_NAME);
-    channel.addEventListener('message', event => { state = validateState(event.data); renderAll(false); });
+    if (!production) channel = new BroadcastChannel(CHANNEL_NAME);
+    channel?.addEventListener('message', event => { state = validateState(event.data); renderAll(false); });
   } catch { channel = null; }
 
   window.addEventListener('storage', event => {
+    if (production) return;
     if (event.key === STORAGE_KEY && event.newValue) {
       try { state = validateState(JSON.parse(event.newValue)); renderAll(false); } catch { /* ignore invalid external state */ }
     }
   });
 
   function saveState() {
+    if (production) return true;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       channel?.postMessage(state);
@@ -210,6 +229,37 @@
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 3600);
   }
   function announce(message) { liveRegion.textContent = ''; requestAnimationFrame(() => { liveRegion.textContent = message; }); }
+  function applyServerState(payload) {
+    serverAdmin = Boolean(payload.isAdmin);
+    Object.entries(payload.campaigns || {}).forEach(([key, campaign]) => {
+      if (campaigns[key]) { campaigns[key].total = campaign.total; campaigns[key].cost = campaign.cost; }
+    });
+    state = validateState(payload);
+    document.querySelectorAll('[data-open-admin],.admin-preview').forEach(item => { item.hidden = !serverAdmin; });
+    renderAll();
+  }
+  async function syncAccount() {
+    if (!production) return;
+    const revision = ++sessionRevision;
+    await window.NTBackend.ready;
+    if (revision !== sessionRevision) return;
+    if (!window.NTBackend.user) {
+      serverAdmin = false; adminRequests = null; adminDraws = null; state = createDefaultState(); renderAll(false);
+      document.querySelectorAll('[data-open-admin],.admin-preview').forEach(item => { item.hidden = true; });
+      document.querySelector('#profileTitle').textContent = 'ゲスト';
+      document.querySelector('.profile-head p').textContent = 'ログインして会員情報を確認';
+      return;
+    }
+    try {
+      const snapshot = await window.NTBackend.rpc('nt_state');
+      if (revision !== sessionRevision) return;
+      applyServerState(snapshot);
+      document.querySelector('#profileTitle').textContent = window.NTBackend.user.email;
+      document.querySelector('.profile-head small').textContent = 'MEMBER';
+      document.querySelector('.profile-head p').textContent = '会員ID：' + window.NTBackend.user.id;
+    } catch (error) { if (revision !== sessionRevision) return; serverAdmin = false; state = createDefaultState(); renderAll(false); showToast(error.message, 'error'); }
+  }
+  window.addEventListener('nt-session', () => { accountSync = syncAccount(); });
   function openDialog(dialog) {
     document.querySelectorAll('dialog[open]').forEach(open => { if (open !== dialog) open.close(); });
     if (!dialog.open) dialog.showModal();
@@ -227,6 +277,12 @@
   function isMissionClaimed(key) { return key === 'daily' ? state.missionClaims.daily === todayKey() : Boolean(state.missionClaims[key]); }
 
   function awardMission(key, amount, label) {
+    if (production) {
+      const answers = key === 'survey' ? [...new FormData(document.querySelector('#surveyForm')).values()] : null;
+      return window.NTBackend.rpc('nt_claim', { p_mission: key, p_answers: answers }).then(payload => {
+        applyServerState(payload); showToast(`${label}のチケットを受け取りました`); return true;
+      }).catch(error => { showToast(error.message, 'error'); return false; });
+    }
     if (isMissionClaimed(key)) { showToast('このミッションの報酬は受け取り済みです', 'error'); return false; }
     state.missionClaims[key] = key === 'daily' ? todayKey() : true;
     addLedger(amount, label, 'ミッション付与');
@@ -241,7 +297,7 @@
   function renderAll(animate = true) {
     document.querySelectorAll('.js-balance').forEach(element => animate ? setAnimatedNumber(element, state.balance) : (element.textContent = formatNumber(state.balance)));
     document.querySelectorAll('.js-prize-count').forEach(element => { element.textContent = formatNumber(availableCount()); });
-    const unclaimed = Object.keys(missionRewards).filter(key => !isMissionClaimed(key)).length;
+    const unclaimed = Object.keys(missionRewards).filter(key => (!production || ['daily','survey'].includes(key)) && !isMissionClaimed(key)).length;
     document.querySelectorAll('.js-missions').forEach(element => { element.textContent = unclaimed; });
     const lastRemaining = state.campaigns.last.remaining;
     document.querySelectorAll('.js-last-count').forEach(element => { element.textContent = lastRemaining; });
@@ -265,8 +321,9 @@
       if (!button || !item) return;
       const done = isMissionClaimed(key);
       item.classList.toggle('is-complete', done);
-      button.disabled = done;
-      button.textContent = done ? '獲得済み' : control.label;
+      const unavailable = production && ['ad', 'app'].includes(key);
+      button.disabled = done || unavailable;
+      button.textContent = unavailable ? '準備中' : done ? '獲得済み' : control.label;
     });
   }
 
@@ -274,7 +331,7 @@
     const button = document.querySelector('.js-daily-button');
     const done = isMissionClaimed('daily');
     button.disabled = done;
-    button.textContent = done ? '今日の分は受け取り済み' : '今日の20枚を受け取る';
+    button.textContent = done ? '今日の分は受け取り済み' : production && !window.NTBackend.user ? 'ログインして受け取る' : '今日の20枚を受け取る';
   }
 
   function renderCampaignCards() {
@@ -287,7 +344,8 @@
       if (status) status.textContent = !campaign.active ? '現在停止中' : soldOut ? 'SOLD OUT' : `残り ${formatNumber(campaign.remaining)} / ${formatNumber(config.total)}口`;
       card?.classList.toggle('is-paused', !campaign.active);
       card?.classList.toggle('is-sold-out', soldOut);
-      if (button) button.disabled = !campaign.active || soldOut;
+      if (production && !window.NTBackend.user && status) status.textContent = window.NTBackend.configured ? 'ログインして確認' : '受付準備中';
+      if (button) button.disabled = production && !window.NTBackend.user ? false : !campaign.active || soldOut;
     });
   }
 
@@ -306,7 +364,7 @@
   function prizeVisual(prize, className = 'prize-art-image') {
     return prize.art
       ? `<img class="${className}" src="${prize.art}" alt="" aria-hidden="true" loading="lazy">`
-      : `<span aria-hidden="true">${prize.icon}</span>`;
+      : `<svg class="item-illustration" aria-hidden="true"><use href="#${prize.name.includes('羽根') ? 'i-feather' : prize.name.includes('月') ? 'i-moon' : prize.name.includes('宝珠') ? 'i-wave' : prize.name.includes('お守り') || prize.name.includes('勾玉') ? 'i-charm' : 'i-gift'}"></use></svg>`;
   }
 
   function renderOwnedPrizes() {
@@ -350,9 +408,11 @@
   }
 
   function renderAdmin() {
+    const draws = adminDraws || state.drawHistory;
     document.querySelectorAll('.js-admin-balance,.js-admin-balance-preview').forEach(element => { element.textContent = formatNumber(state.balance); });
-    document.querySelectorAll('.js-admin-draw-total').forEach(element => { element.textContent = formatNumber(state.drawHistory.reduce((sum, item) => sum + item.count, 0)); });
-    const pending = state.exchangeRequests.filter(request => !['発送済み', '交換済み'].includes(request.status)).length;
+    document.querySelectorAll('.js-admin-draw-total').forEach(element => { element.textContent = formatNumber(draws.reduce((sum, item) => sum + item.count, 0)); });
+    const requests = adminRequests || state.exchangeRequests;
+    const pending = requests.filter(request => !['発送済み', '交換済み'].includes(request.status)).length;
     document.querySelectorAll('.js-admin-request-count,.js-admin-request-preview').forEach(element => { element.textContent = pending; });
     document.querySelectorAll('.js-admin-updated').forEach(element => { element.textContent = formatTime(); });
     const campaignsContainer = document.querySelector('.js-admin-campaigns');
@@ -361,11 +421,11 @@
       return `<article><div><b>${escapeHtml(config.name)}</b><small>${config.cost}枚/回・残り ${formatNumber(current.remaining)} / ${formatNumber(config.total)}口${config.lastOne ? '・LAST ONE' : ''}</small></div><button type="button" data-admin-toggle="${key}" aria-pressed="${current.active}" class="${current.active ? 'is-on' : ''}"><i></i>${current.active ? '公開中' : '停止中'}</button></article>`;
     }).join('');
     const drawsContainer = document.querySelector('.js-admin-draws');
-    if (!state.drawHistory.length) drawsContainer.innerHTML = '<div class="empty-row">抽選履歴はまだありません。ユーザー画面でガチャを引くと表示されます。</div>';
-    else drawsContainer.innerHTML = `<table><thead><tr><th>日時 / 取引ID</th><th>ガチャ</th><th>回数</th><th>消費</th><th>内訳</th><th>LAST</th></tr></thead><tbody>${state.drawHistory.slice(0, 12).map(draw => `<tr><td>${formatDate(draw.at, true)}<small>${escapeHtml(draw.id)}</small></td><td>${escapeHtml(campaigns[draw.campaignKey]?.name || draw.campaignKey)}</td><td>${draw.count}回</td><td>${draw.cost}枚</td><td>${Object.entries(draw.summary).map(([rarity, count]) => `${rarity}:${count}`).join(' / ')}</td><td>${draw.lastBonus ? '付与' : '—'}</td></tr>`).join('')}</tbody></table>`;
+    if (!draws.length) drawsContainer.innerHTML = '<div class="empty-row">抽選履歴はまだありません。</div>';
+    else drawsContainer.innerHTML = `<table><thead><tr><th>日時 / 取引ID</th><th>ガチャ</th><th>回数</th><th>消費</th><th>内訳</th><th>LAST</th></tr></thead><tbody>${draws.slice(0, 12).map(draw => `<tr><td>${formatDate(draw.at, true)}<small>${escapeHtml(draw.id)}</small></td><td>${escapeHtml(campaigns[draw.campaignKey]?.name || draw.campaignKey)}</td><td>${draw.count}回</td><td>${draw.cost}枚</td><td>${Object.entries(draw.summary).map(([rarity, count]) => `${rarity}:${count}`).join(' / ')}</td><td>${draw.lastBonus ? '付与' : '—'}</td></tr>`).join('')}</tbody></table>`;
     const requestsContainer = document.querySelector('.js-admin-requests');
-    if (!state.exchangeRequests.length) requestsContainer.innerHTML = '<div class="empty-row">交換申請はまだありません</div>';
-    else requestsContainer.innerHTML = state.exchangeRequests.map(request => `<article class="admin-request"><div><span>${escapeHtml(request.id)} / ${formatDate(request.at, true)}</span><b>${request.items.map(item => `${escapeHtml(prizes[item.prizeId]?.name || item.prizeId)} ×${item.quantity}`).join('、')}</b><small>${MEMBER_ID}・${escapeHtml(request.addressMasked)}</small></div><label><span>ステータス</span><select data-request-status="${escapeHtml(request.id)}">${(request.method === 'チケット交換' ? ['交換済み'] : ['受付済み', '内容確認済み', '発送準備中', '発送済み']).map(status => `<option${status === request.status ? ' selected' : ''}>${status}</option>`).join('')}</select></label></article>`).join('');
+    if (!requests.length) requestsContainer.innerHTML = '<div class="empty-row">交換申請はまだありません</div>';
+    else requestsContainer.innerHTML = requests.map(request => `<article class="admin-request"><div><span>${escapeHtml(request.id)} / ${formatDate(request.at, true)}</span><b>${request.items.map(item => `${escapeHtml(prizes[item.prizeId]?.name || item.prizeId)} ×${item.quantity}`).join('、')}</b><small>${escapeHtml(request.memberId || MEMBER_ID)}・${escapeHtml(request.addressMasked)}</small></div><label><span>ステータス</span><select data-request-status="${escapeHtml(request.id)}">${(request.method === 'チケット交換' ? ['交換済み'] : ['受付済み', '内容確認済み', '発送準備中', '発送済み']).map(status => `<option${status === request.status ? ' selected' : ''}>${status}</option>`).join('')}</select></label></article>`).join('');
     const auditContainer = document.querySelector('.js-admin-audit');
     if (!state.adminAudit.length) auditContainer.innerHTML = '<div class="empty-row">管理操作はまだありません</div>';
     else auditContainer.innerHTML = state.adminAudit.slice(0, 8).map(item => `<div><span>${formatDate(item.at, true)}</span><p>${escapeHtml(item.label)}</p></div>`).join('');
@@ -398,6 +458,8 @@
   }
 
   function openDraw(campaignKey = 'neon', preset = 1) {
+    if (production && !window.NTBackend.user) { window.NTBackend.open(); return; }
+    drawRequestKey = null;
     clearTimeout(animationTimer); animationTimer = null; drawLock = false; pendingResult = null;
     const config = campaigns[campaignKey]; const current = state.campaigns[campaignKey];
     if (!config || !current) return;
@@ -458,10 +520,24 @@
     return pool[4 + Math.floor(Math.random() * 3)];
   }
 
-  function executeDraw() {
+  async function executeDraw() {
     if (!canDraw()) return;
     animatePulse(drawDialog, 'is-executing');
     drawLock = true; drawDialog.querySelector('.js-execute-draw').disabled = true;
+    if (production) {
+      try {
+        drawRequestKey ||= crypto.randomUUID();
+        const revision = sessionRevision;
+        const payload = await window.NTBackend.rpc('nt_draw', { p_campaign: activeCampaignKey, p_count: selectedCount, p_key: drawRequestKey });
+        if (revision !== sessionRevision) { drawLock = false; closeDialog(drawDialog); return; }
+        applyServerState(payload.state); pendingResult = payload.result; lastResultIds = pendingResult.resultIds;
+        setDrawStep('animation');
+        const summary = pendingResult.summary;
+        drawDialog.dataset.effect = pendingResult.lastBonus ? 'last' : summary.SSR ? 'ssr' : summary.SR ? 'sr' : summary.R ? 'r' : 'n';
+        animationTimer = setTimeout(() => showResults(pendingResult), matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 1450);
+      } catch (error) { drawLock = false; drawDialog.querySelector('.js-execute-draw').disabled = false; showToast(error.message, 'error'); }
+      return;
+    }
     const config = campaigns[activeCampaignKey]; const current = state.campaigns[activeCampaignKey];
     const cost = selectedCount * config.cost; const transactionId = makeId('DR');
     const resultIds = Array.from({ length: selectedCount }, () => pickPrize(activeCampaignKey));
@@ -517,10 +593,19 @@
     exchangeDialog.querySelectorAll('[data-exchange-step]').forEach(panel => { panel.hidden = panel.dataset.exchangeStep !== step; });
     exchangeDialog.scrollTop = 0;
   }
-  function openExchange() { pendingExchange = null; renderExchangeItems(); setExchangeStep('form'); openDialog(exchangeDialog); }
+  function openExchange() { if (production && !window.NTBackend.user) { window.NTBackend.open(); return; } pendingExchange = null; renderExchangeItems(); setExchangeStep('form'); openDialog(exchangeDialog); }
 
-  function finalizeExchange() {
+  async function finalizeExchange() {
     if (!pendingExchange) return;
+    if (production) {
+      const button = document.querySelector('[data-submit-exchange]'); if (button.disabled) return; button.disabled = true;
+      try {
+        pendingExchange.key ||= crypto.randomUUID();
+        const payload = await window.NTBackend.rpc('nt_exchange', { p_prizes: pendingExchange.prizeIds, p_method: pendingExchange.method, p_recipient: { name: pendingExchange.name, postal: pendingExchange.postal, address: pendingExchange.address }, p_key: pendingExchange.key });
+        applyServerState(payload.state); exchangeDialog.querySelector('.js-complete-request-id').textContent = payload.id; setExchangeStep('complete');
+      } catch (error) { showToast(error.message, 'error'); } finally { button.disabled = false; }
+      return;
+    }
     const id = `EX-${String(state.exchangeRequests.length + 1).padStart(4, '0')}`;
     const selectedSet = new Set(pendingExchange.prizeIds);
     const selectedItems = state.inventory.filter(item => item.status === '保有中' && selectedSet.has(item.prizeId));
@@ -535,6 +620,7 @@
   }
 
   function preparePreset(kind) {
+    if (production) return;
     if (kind === 'last') {
       state.campaigns.last.remaining = 1; state.campaigns.last.active = true; state.campaigns.last.lastOneAwarded = false;
       state.inventory = state.inventory.filter(item => item.prizeId !== 'lastBonus');
@@ -560,6 +646,7 @@
   }
 
   function resetDemo() {
+    if (production) return;
     if (!window.confirm('チケット・景品・履歴・デモ進捗を初期状態に戻しますか？')) return;
     state = createDefaultState(); saveState(); renderAll(false);
     document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close()); showToast('デモデータを初期状態に戻しました');
@@ -580,6 +667,7 @@
     openDraw(button.dataset.campaign);
   }));
   drawDialog.querySelectorAll('input[name="draw-count"]').forEach(radio => radio.addEventListener('change', () => {
+    drawRequestKey = null;
     selectedCount = Number(radio.value);
     drawDialog.querySelectorAll('.draw-option').forEach(label => label.classList.toggle('is-selected', label.contains(radio)));
     animatePulse(radio.closest('.draw-option'), 'is-picked');
@@ -597,6 +685,7 @@
   drawDialog.querySelector('.js-execute-draw').addEventListener('click', executeDraw);
   drawDialog.querySelector('.js-skip').addEventListener('click', () => { if (pendingResult) showResults(pendingResult); });
   drawDialog.querySelector('.js-draw-again').addEventListener('click', () => {
+    drawRequestKey = null;
     pendingResult = null; drawDialog.querySelector('#understandCheck').checked = false; drawDialog.querySelector('.js-execute-draw').disabled = true;
     if (state.campaigns[activeCampaignKey].remaining > 0) { updateDrawNumbers(); setDrawStep('select'); }
     else { closeDialog(drawDialog); showToast('このガチャは完売しました'); }
@@ -633,13 +722,13 @@
       if (seconds <= 0) { clearInterval(adTimer); adTimer = null; completeButton.disabled = false; completeButton.textContent = '視聴完了として30枚受け取る'; }
     }, 1000);
   });
-  adDialog.querySelector('.js-ad-complete').addEventListener('click', () => { if (awardMission('ad', missionRewards.ad, '広告視聴デモ')) closeDialog(adDialog); });
+  adDialog.querySelector('.js-ad-complete').addEventListener('click', async () => { if (await awardMission('ad', missionRewards.ad, '広告視聴デモ')) closeDialog(adDialog); });
   document.querySelector('[data-open-survey]').addEventListener('click', () => {
     if (isMissionClaimed('survey')) { showToast('アンケートデモは回答済みです'); return; }
     document.querySelector('#surveyForm').reset(); openDialog(surveyDialog);
   });
-  document.querySelector('#surveyForm').addEventListener('submit', event => {
-    event.preventDefault(); if (awardMission('survey', missionRewards.survey, 'アンケート回答デモ')) closeDialog(surveyDialog);
+  document.querySelector('#surveyForm').addEventListener('submit', async event => {
+    event.preventDefault(); if (await awardMission('survey', missionRewards.survey, 'アンケート回答')) closeDialog(surveyDialog);
   });
 
   document.querySelectorAll('[role="tab"][data-filter]').forEach((tab, index, tabs) => {
@@ -659,7 +748,7 @@
     event.preventDefault(); const form = new FormData(event.currentTarget); const prizeIds = form.getAll('prize');
     if (!prizeIds.length) { showToast('交換する景品を1つ以上選んでください', 'error'); return; }
     pendingExchange = { prizeIds, method: String(form.get('method')), name: String(form.get('name')), postal: String(form.get('postal')), address: String(form.get('address')) };
-    const items = prizeIds.map(id => { const quantity = availableInventory().filter(item => item.prizeId === id).length; return `<li><span>${prizes[id].icon}</span><b>${escapeHtml(prizes[id].name)}</b><em>×${quantity}</em></li>`; }).join('');
+    const items = prizeIds.map(id => { const quantity = availableInventory().filter(item => item.prizeId === id).length; return `<li><span>${prizeVisual(prizes[id], 'exchange-prize-image')}</span><b>${escapeHtml(prizes[id].name)}</b><em>×${quantity}</em></li>`; }).join('');
     exchangeDialog.querySelector('.js-exchange-review').innerHTML = `<ul>${items}</ul><dl><div><dt>受取方法</dt><dd>${escapeHtml(pendingExchange.method)}</dd></div><div><dt>お届け先</dt><dd>${escapeHtml(pendingExchange.name)}<br>${escapeHtml(pendingExchange.postal)} ${escapeHtml(pendingExchange.address)}</dd></div></dl>`;
     setExchangeStep('confirm');
   });
@@ -670,21 +759,40 @@
   document.querySelector('[data-submit-exchange]').addEventListener('click', finalizeExchange);
   document.querySelector('[data-open-admin-from-exchange]').addEventListener('click', () => { closeDialog(exchangeDialog); completeDemoStep(6); openDialog(adminDialog); });
 
-  document.querySelectorAll('[data-open-admin]').forEach(button => button.addEventListener('click', () => { closeDialog(profileDialog); completeDemoStep(6); openDialog(adminDialog); }));
-  document.querySelector('#adminGrantForm').addEventListener('submit', event => {
+  async function refreshAdmin() {
+    const payload = await window.NTBackend.rpc('nt_admin_state');
+    adminRequests = payload.requests; adminDraws = payload.draws; state.adminAudit = payload.audit; renderAdmin();
+    document.querySelector('.admin-kpis article:first-child>b').textContent = formatNumber(payload.memberCount);
+    document.querySelector('.js-admin-draw-total').textContent = formatNumber(payload.drawCount);
+  }
+  document.querySelectorAll('[data-open-admin]').forEach(button => button.addEventListener('click', async () => {
+    if (production) { try { await refreshAdmin(); } catch (error) { showToast(error.message, 'error'); return; } }
+    closeDialog(profileDialog); completeDemoStep(6); openDialog(adminDialog);
+  }));
+  document.querySelector('#adminGrantForm').addEventListener('submit', async event => {
     event.preventDefault(); const form = new FormData(event.currentTarget); const amount = Number(form.get('amount')); const reason = String(form.get('reason'));
     if (!Number.isInteger(amount) || amount < 1 || amount > 10000) { showToast('付与枚数は1〜10,000枚で入力してください', 'error'); return; }
+    if (production) {
+      const submit = event.currentTarget.querySelector('[type=submit]'); if (submit.disabled) return; submit.disabled = true;
+      try { adminGrantKey ||= crypto.randomUUID(); applyServerState(await window.NTBackend.rpc('nt_admin', { p_action: 'grant', p_data: { member: form.get('member'), amount, reason, key: adminGrantKey } })); adminGrantKey = null; await refreshAdmin(); showToast('チケットを付与しました'); }
+      catch (error) { showToast(error.message, 'error'); } finally { submit.disabled = false; }
+      return;
+    }
     addLedger(amount, `管理付与：${reason}`, '管理付与'); addAudit(`${MEMBER_ID}へ${amount}枚付与（${reason}）`); commit();
     showToast(`NEONデモさんに${formatNumber(amount)}枚付与しました`);
   });
-  document.querySelector('.js-admin-campaigns').addEventListener('click', event => {
+  document.querySelector('.js-admin-campaigns').addEventListener('click', async event => {
     const button = event.target.closest('[data-admin-toggle]'); if (!button) return;
-    const key = button.dataset.adminToggle; state.campaigns[key].active = !state.campaigns[key].active;
+    const key = button.dataset.adminToggle;
+    if (production) { button.disabled = true; try { applyServerState(await window.NTBackend.rpc('nt_admin', { p_action: 'campaign', p_data: { campaign: key, active: !state.campaigns[key].active } })); await refreshAdmin(); } catch (error) { showToast(error.message, 'error'); button.disabled = false; } return; }
+    state.campaigns[key].active = !state.campaigns[key].active;
     addAudit(`${campaigns[key].name}を${state.campaigns[key].active ? '公開' : '停止'}`); commit();
     showToast(`${campaigns[key].name}を${state.campaigns[key].active ? '公開しました' : '停止しました'}`);
   });
-  document.querySelector('.js-admin-requests').addEventListener('change', event => {
+  document.querySelector('#adminGrantForm').addEventListener('input', () => { adminGrantKey = null; });
+  document.querySelector('.js-admin-requests').addEventListener('change', async event => {
     const select = event.target.closest('[data-request-status]'); if (!select) return;
+    if (production) { select.disabled = true; try { applyServerState(await window.NTBackend.rpc('nt_admin', { p_action: 'status', p_data: { request: select.dataset.requestStatus, status: select.value } })); } catch (error) { showToast(error.message, 'error'); } finally { await refreshAdmin().catch(error => showToast(error.message, 'error')); } return; }
     const request = state.exchangeRequests.find(item => item.id === select.dataset.requestStatus); if (!request) return;
     request.status = select.value;
     if (select.value === '発送済み') state.inventory.filter(item => item.requestId === request.id).forEach(item => { item.status = '交換済み'; });
@@ -722,4 +830,25 @@
   }, { rootMargin: '-25% 0px -60%', threshold: [0, .2, .5] });
   observedSections.forEach(section => navObserver.observe(section));
   updateCountdown(); setInterval(updateCountdown, 60000); saveState(); renderAll(false);
+  if (production) {
+    document.body.classList.add('release-mode');
+    document.querySelectorAll('[data-open-demo],.demo-reset,[data-preset],[data-last-preset],[data-fill-sample],[data-open-admin-from-exchange]').forEach(item => { item.hidden = true; });
+    document.querySelectorAll('[data-open-admin],.admin-preview').forEach(item => { item.hidden = true; });
+    document.querySelector('#profileTitle').textContent = 'ゲスト';
+    document.querySelector('.profile-head small').textContent = 'ACCOUNT';
+    document.querySelector('.profile-head p').textContent = 'ログインして会員情報を確認';
+    document.querySelector('#adminGrantForm input[disabled]').disabled = false;
+    const targetInput = document.querySelector('#adminGrantForm input'); targetInput.name = 'member'; targetInput.value = ''; targetInput.placeholder = '会員UUID'; targetInput.required = true;
+    document.querySelector('.admin-notice p').textContent = '管理者専用。操作はサーバーで権限を確認し、記録されます。';
+    document.querySelector('.footer-bottom p').textContent = 'NEON TICKET — 和幻コレクション。会員受付・配送条件は各案内をご確認ください。';
+    document.querySelector('.footer-bottom>span').textContent = '© 2026 NEON TICKET';
+    document.querySelector('#exchangeForm .form-note').textContent = '配送先は交換申請の受付・発送のために保存されます。';
+    document.querySelectorAll('[data-mission="ad"], [data-mission="app"]').forEach(item => { item.querySelector('.mission-action').disabled = true; item.querySelector('.mission-action').textContent = '準備中'; item.querySelector('.mission-copy>span').textContent = '近日公開'; item.querySelector('.mission-copy p').textContent = '提供開始までお待ちください'; });
+    document.querySelector('[data-mission="survey"] .mission-copy>span').textContent = 'アンケート・約1分';
+    document.querySelector('.draw-lineup-head small').textContent = '提供割合：SSR 1%・SR 9%・R 30%・N 60%';
+    document.querySelectorAll('.gacha-card p,.last-one-copy>p').forEach(item => { item.textContent = item.textContent.replace('デモ専用', '限定'); });
+    document.querySelector('.remaining-row>span').textContent = '限定コレクション';
+    document.querySelector('.js-daily-button').textContent = 'ログインして受け取る';
+    accountSync = syncAccount();
+  }
 })();

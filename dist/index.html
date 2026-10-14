@@ -8,6 +8,8 @@
   <title>NEON TICKET | 和幻コレクションWEBガチャ</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="account.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body class="neon-theme japanese-theme">
@@ -28,6 +30,11 @@
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.1"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
     <symbol id="i-box" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7M12 11v10"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/><path d="m17 2 .5 2.5L20 5l-2.5.5L17 8l-.5-2.5L14 5l2.5-.5Z"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 15c4 0 4-3 7-3s4 3 7 3 4-3 6-3M2 20c4 0 4-3 7-3s4 3 7 3 4-3 6-3M4 10c1-6 9-9 13-4-4-1-6 1-6 4"/></symbol>
+    <symbol id="i-charm" viewBox="0 0 24 24"><path d="M8 5c0-5 8-5 8 0l-4 3-4-3Zm-2 5 6-3 6 3 2 10H4l2-10Z"/><path d="m12 11 3 3-3 3-3-3 3-3Z"/></symbol>
+    <symbol id="i-feather" viewBox="0 0 24 24"><path d="M3 21 18 6M8 16C-1 8 13-1 21 3c2 9-6 21-13 13ZM12 12h6M15 9V5"/></symbol>
   </svg>
 
   <div class="ambient ambient-one"></div>
@@ -49,6 +56,7 @@
       </nav>
 
       <div class="header-actions">
+        <button class="account-login" type="button" data-open-account><svg><use href="#i-user"></use></svg><span>ログイン</span></button>
         <button class="demo-launch" type="button" data-open-demo><svg><use href="#i-spark"></use></svg> デモを体験</button>
         <button class="balance-pill" type="button" data-open-earn aria-label="チケット残高。クリックして貯める">
           <svg><use href="#i-ticket"></use></svg>
@@ -70,7 +78,7 @@
       <div class="hero-copy">
         <div class="eyebrow"><span></span>和幻召喚 / JAPANESE FANTASY GACHA</div>
         <h1 id="hero-title"><span>日常のひとときが、</span><br>物語に変わる。</h1>
-        <p>任務でチケットを集め、和幻の仲間を召喚。<br class="desktop-only">妖狐、狛犬、猫又との出会いを楽しもう。</p>
+        <p>任務でチケットを集め、和幻の仲間を召喚。<br class="desktop-only">太陽、月、海。五つの世界を旅しよう。</p>
         <div class="hero-actions">
           <button class="button button-primary button-large" type="button" data-draw data-campaign="neon">
             今すぐガチャを引く <svg><use href="#i-arrow"></use></svg>
@@ -82,6 +90,7 @@
 
       <div class="hero-stage japanese-stage" aria-label="オリジナルキャラクター、雷光狛犬と光狐ヒカリの限定召喚イメージ">
         <canvas id="three-stage" aria-hidden="true"></canvas>
+        <div class="realm-scenery" aria-hidden="true"><div class="realm-orb"></div><div class="realm-rays"></div><div class="realm-stars"></div><div class="realm-waves"><i></i><i></i><i></i></div><div class="realm-mist"></div></div>
         <div class="stage-grid"></div>
         <span class="stage-kicker">NEON TICKET / 和幻絵巻</span>
         <div class="float-chip float-chip-left"><i></i> 完全オリジナルキャラクター</div>
@@ -99,12 +108,14 @@
           <div><small>CHAPTER 01 / 妖狐雷光録</small><b>光狐ヒカリを召喚せよ</b></div>
           <div class="ticket-cost"><svg><use href="#i-ticket"></use></svg><b>1</b><small>/ 1回</small></div>
         </div>
-        <div class="summon-machine" aria-hidden="true"><div class="machine-dome"><span>✦</span><i></i><i></i><i></i></div><div class="machine-base"><b>和幻召喚</b><span class="machine-handle">✦</span><div class="machine-slot"></div></div></div>
+        <div class="summon-machine" aria-hidden="true"><div class="machine-top"><span>NT / 05</span><i></i></div><div class="machine-dome"><div class="machine-screen"><small>NEON TICKET</small><svg><use href="#i-spark"></use></svg><b>SUMMON</b><span class="machine-level"><i></i><i></i><i></i><i></i><i></i></span></div><i></i><i></i><i></i></div><div class="machine-base"><b>和幻召喚</b><span class="machine-handle">✦</span><div class="machine-slot"><span></span></div><div class="machine-contact"><svg><use href="#i-ticket"></use></svg> TOUCH TO SUMMON</div></div><div class="machine-feet"></div></div>
         <div class="summon-caption"><small>SUMMON LIVE / PREVIEW</small><b id="summon-caption">運命のカプセルが、回り出す。</b></div>
         <div class="summon-collection" aria-label="演出内のコレクション"><span>COLLECTION</span><div></div></div>
-        <div class="summon-controls" aria-label="FV演出操作"><button type="button" data-summon="0" aria-pressed="true">🦊 光狐</button><button type="button" data-summon="1" aria-pressed="false">🐕 狛犬</button><button type="button" data-summon="2" aria-pressed="false">🐈 猫又</button><button type="button" id="summon-pause" aria-label="FV演出を一時停止">Ⅱ</button></div>
+        <div class="summon-controls" aria-label="FV演出操作"><button type="button" data-summon="0" aria-pressed="true"><img src="assets/hikari-kitsune.png" alt="">光狐</button><button type="button" data-summon="1" aria-pressed="false"><img src="assets/raikou-komainu.png" alt="">狛犬</button><button type="button" data-summon="2" aria-pressed="false"><img src="assets/tsukimi-nekomata.png" alt="">猫又</button><button type="button" data-summon="3" aria-pressed="false"><img src="assets/akari-phoenix.png" alt="">鳳凰</button><button type="button" data-summon="4" aria-pressed="false"><img src="assets/aoi-seadragon.png" alt="">海龍</button><button type="button" id="summon-pause" aria-label="FV演出を一時停止">Ⅱ</button></div>
       </div>
     </section>
+
+    <section class="realm-invite" aria-label="コレクションへのご案内"><div><span>FIVE GUARDIANS. YOUR STORY.</span><b>五つの世界から、あなたの仲間を見つけよう。</b></div><a class="button button-primary" href="#gacha">コレクションを選ぶ <svg><use href="#i-arrow"></use></svg></a></section>
 
     <section class="status-section" aria-label="アカウント状況">
       <article class="status-card">
@@ -188,6 +199,8 @@
             </div>
           </div>
         </article>
+        <article class="gacha-card" data-campaign-card="solar"><button class="card-hitarea" type="button" data-draw data-campaign="solar" aria-label="暁天鳳凰録を引く"></button><div class="gacha-art art-solar"><div class="art-badge">SUN REALM</div><div class="art-number">暁</div><div class="japanese-card-sun"></div><img class="gacha-character character-phoenix" src="assets/akari-phoenix.png" alt="暁鳳アカリ" loading="lazy"></div><div class="gacha-card-body"><div class="gacha-meta"><span>太陽の守護者</span><small class="js-campaign-status" data-status-for="solar">残り 500 / 500口</small></div><h3>暁天鳳凰録</h3><p>朝焼けを羽ばたく暁鳳アカリ。炎の羽根と幸運のお守りをコレクションに。</p><div class="gacha-card-footer"><div class="price"><svg><use href="#i-ticket"></use></svg><b>2</b><span>枚 / 1回</span></div><span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span></div></div></article>
+        <article class="gacha-card" data-campaign-card="ocean"><button class="card-hitarea" type="button" data-draw data-campaign="ocean" aria-label="蒼海龍絵巻を引く"></button><div class="gacha-art art-ocean"><div class="art-badge">OCEAN REALM</div><div class="art-number">海</div><img class="gacha-character character-seadragon" src="assets/aoi-seadragon.png" alt="蒼海龍アオイ" loading="lazy"></div><div class="gacha-card-body"><div class="gacha-meta"><span>海の守護者</span><small class="js-campaign-status" data-status-for="ocean">残り 400 / 400口</small></div><h3>蒼海龍絵巻</h3><p>波間から現れる蒼海龍アオイ。澄んだ海の光をまとった、新しい仲間との出会い。</p><div class="gacha-card-footer"><div class="price"><svg><use href="#i-ticket"></use></svg><b>2</b><span>枚 / 1回</span></div><span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span></div></div></article>
       </div>
     </section>
 
@@ -412,6 +425,7 @@
       <button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button>
       <div class="profile-head"><div class="profile-avatar">NT</div><div><small>DEMO MEMBER</small><h2 id="profileTitle">NEONデモさん</h2><p>会員ID：NT-0284</p></div></div>
       <div class="profile-stats"><div><small>チケット</small><b><span class="js-balance">320</span>枚</b></div><div><small>景品BOX</small><b><span class="js-prize-count">2</span>個</b></div></div>
+      <div class="account-session"><b>会員アカウント</b><p class="js-account-email">ログインしてコレクションを保存できます。</p><button class="button button-primary button-full" type="button" data-open-account>ログイン・会員登録</button><button class="profile-row" type="button" data-account-logout>ログアウト <svg><use href="#i-arrow"></use></svg></button></div>
       <button class="profile-row" type="button" data-toast="会員情報ページは本実装時に接続します">会員情報 <svg><use href="#i-chevron"></use></svg></button>
       <button class="profile-row" type="button" data-open-admin>管理画面デモ <svg><use href="#i-chevron"></use></svg></button>
       <button class="profile-row" type="button" data-toast="設定ページは本実装時に接続します">通知・設定 <svg><use href="#i-chevron"></use></svg></button>
@@ -488,6 +502,7 @@
   </aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon"><svg><use href="#i-check"></use></svg></span><p></p></div>
+  <dialog class="app-dialog account-dialog" id="accountDialog" aria-labelledby="accountTitle"><div class="dialog-shell"><button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button><div class="dialog-heading"><div class="dialog-kicker">YOUR COLLECTION STARTS HERE</div><h2 id="accountTitle">仲間との出会いを、保存しよう。</h2><p>メールまたはGoogleでログイン</p></div><div class="account-tabs"><button type="button" data-account-mode="login" aria-pressed="true">ログイン</button><button type="button" data-account-mode="signup" aria-pressed="false">新規登録</button></div><form id="accountForm"><label>メールアドレス<input name="email" type="email" autocomplete="email" required maxlength="254"></label><label class="account-password">パスワード<input name="password" type="password" autocomplete="current-password" minlength="12" required maxlength="128"></label><p class="account-password-note">新規登録は12文字以上。登録後、確認メールを開いてください。</p><button class="button button-primary button-full" type="submit">メールでログイン</button></form><button class="button button-ghost button-full account-google" type="button" id="accountGoogle">Googleで続ける</button><button class="back-link" type="button" id="accountReset">パスワードを忘れた方</button><p id="accountMessage" role="status" aria-live="polite"></p></div></dialog>
   <div class="sr-only" id="liveRegion" aria-live="assertive"></div>
   <script src="summon.js" defer></script>
   <script type="module">
@@ -522,6 +537,11 @@
         resize(); window.addEventListener('resize', resize, { passive: true });
         let burst = 0;
         canvas.parentElement.addEventListener('summonphase', event => { if (event.detail === 'release') burst = 1; });
+        canvas.parentElement.addEventListener('summonrealm', event => {
+          material.color.set(event.detail.color);
+          group.children[1].material.color.set(event.detail.color);
+        });
+        material.color.set(getComputedStyle(canvas.parentElement).getPropertyValue('--summon-color').trim() || '#70deed');
         const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
         const tick = time => {
           if (!document.hidden && !motionPreference.matches && !canvas.parentElement.classList.contains('summon-paused') && canvas.parentElement.getBoundingClientRect().bottom > 0) {

@@ -46,6 +46,7 @@ async function capture({ width, height, mobile, output, selector = null }) {
   const cdp = new CdpClient(target.webSocketDebuggerUrl);
   await cdp.connect();
   await Promise.all([cdp.send('Page.enable'), cdp.send('Runtime.enable')]);
+  await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await cdp.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile });
   await cdp.send('Runtime.evaluate', {
     expression: `localStorage.removeItem('neon-ticket-demo-v2'); location.reload()`,
@@ -53,7 +54,7 @@ async function capture({ width, height, mobile, output, selector = null }) {
   });
   await sleep(1300);
   await cdp.send('Runtime.evaluate', {
-    expression: `Promise.all([...document.images].map(image => image.decode().catch(() => {}))).then(() => document.fonts.ready)`,
+    expression: `Promise.all([...document.images].map(image => { image.loading = 'eager'; return image.decode().catch(() => {}); })).then(() => document.fonts.ready)`,
     awaitPromise: true
   });
   if (selector) {

@@ -5,19 +5,23 @@
   const character = stage.querySelector('.hero-kitsune');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const cast = [
-    { name: '光狐ヒカリ', art: 'assets/hikari-kitsune.png', color: '#70deed' },
-    { name: '雷光狛犬', art: 'assets/raikou-komainu.png', color: '#e5bf67' },
-    { name: '月見猫又', art: 'assets/tsukimi-nekomata.png', color: '#d8a0ef' }
+    { name: '光狐ヒカリ', art: 'assets/hikari-kitsune.png', color: '#70deed', realm: 'spirit' },
+    { name: '雷光狛犬', art: 'assets/raikou-komainu.png', color: '#e5bf67', realm: 'storm' },
+    { name: '月見猫又', art: 'assets/tsukimi-nekomata.png', color: '#d8a0ef', realm: 'moon' },
+    { name: '暁鳳アカリ', art: 'assets/akari-phoenix.png', color: '#ffb65d', realm: 'sun' },
+    { name: '蒼海龍アオイ', art: 'assets/aoi-seadragon.png', color: '#70ede2', realm: 'ocean' }
   ];
   let selected = 0, elapsed = 0, previous = 0, phase = '', paused = false, visible = true;
   const labels = ['運命のカプセルが、回り出す。', '和幻の扉、開け。', '仲間があなたのもとへ。', '新しい出会いを、コレクションに。'];
   function choose(index) {
     selected = index; elapsed = 0; phase = '';
     character.src = cast[index].art; character.alt = cast[index].name;
+    stage.dataset.realm = cast[index].realm;
+    stage.dispatchEvent(new CustomEvent('summonrealm', { detail: cast[index] }));
     stage.style.setProperty('--summon-color', cast[index].color);
     stage.querySelector('.hero-nameplate b').textContent = cast[index].name;
     stage.querySelectorAll('[data-summon]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.summon) === index)));
-    collection.innerHTML = cast.map(item => `<img src="${item.art}" alt="${item.name}">`).join('') + '<span>⛩️</span><span>🔔</span>';
+    collection.innerHTML = cast.map(item => `<img src="${item.art}" alt="${item.name}">`).join('');
     update();
   }
   function update() {

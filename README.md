@@ -1,11 +1,15 @@
-# NEON TICKET — 和幻コレクションWEBガチャ MVP
+# NEON TICKET — 和幻コレクションWEBガチャ
+
+**本番接続は未完了です。** Supabaseプロジェクトは未作成で、初期画面は受付準備中になります。メール／Google認証・会員別保存・サーバー側抽選・管理者操作の接続コードとSQLを用意しています。導入手順・未接続機能は [RELEASE_SETUP.md](RELEASE_SETUP.md) を確認してください。
+
+キャラクターは5体（妖狐・狛犬・猫又・鳳凰・海龍）。FV背景は狐火・雷・月・太陽・海へ切り替わります。モダンな召喚端末、SVGアイコン、選択・ホバー効果とCTAを追加しています。
 
 FVは10秒の動画風召喚ループです。カプセル回転→キャラクターの弧を描く登場→着地→アイテムの順次整列を表示し、光狐・狛犬・猫又の選択と一時停止に対応します。表示中だけ進行し、動きを減らす設定では静止表示になります。Three.jsリングは召喚に同期して拡大・加速します。演出内コレクションはプレビューで、実際の残高・景品には影響しません。
 
-妖狐・雷光狛犬・猫又が登場する和風ゲーム世界で「チケットを貯める → ガチャを引く → 景品を申請する → 管理画面で確認する」までを約60秒で体験できる、CrowdWorks提案用のレスポンシブデモです。
+以下の60秒体験は `?preview=1` のブラウザ内プレビューです。配布モードの実データとは別です。
 
 - 公開デモ：<https://tokimeki-draw-mvp.webnexa3114.chatgpt.site>
-- 会員登録・パスワード：不要
+- プレビューの会員登録・パスワード：不要。本番はSupabase認証が必要。
 - デモ会員：NEONデモさん（`NT-0284`）
 - 初期チケット：320枚
 
@@ -29,7 +33,7 @@ cd tokimeki-draw
 py -m http.server 4173 --directory dist
 ```
 
-ブラウザで <http://localhost:4173> を開きます。終了するときは、起動したターミナルで `Ctrl + C` を押してください。
+配布モードは <http://localhost:4173>、既存機能のプレビューは <http://localhost:4173/?preview=1> を開きます。終了するときは、起動したターミナルで `Ctrl + C` を押してください。
 
 `dist/index.html` を直接開いても表示できますが、動作確認にはローカルサーバーを推奨します。
 
@@ -98,7 +102,7 @@ py -m http.server 4173 --directory dist
 | 375 / 768 / 900 / 1440pxの横あふれ・ナビ切替 | PASS |
 | コンソール・ランタイム・主要アセットエラー | PASS |
 
-結果は **56件成功・0件失敗** です。詳細は [QA_REPORT.md](QA_REPORT.md)、再実行コードは [tests/smoke.mjs](tests/smoke.mjs) にあります。
+最新結果は **プレビュー63件、配布モード10件、SQL22件成功** です。Supabase本番認証は未接続のため未検証です。詳細は [QA_REPORT.md](QA_REPORT.md) にあります。
 
 ## スクリーンショット
 
@@ -122,10 +126,15 @@ tokimeki-draw/
 │   ├── index.html
 │   ├── styles.css
 │   ├── app.js
+│   ├── account.js
+│   ├── config.js
+│   ├── summon.js
 │   ├── favicon.svg
 │   └── assets/
 │       ├── hikari-kitsune.png
 │       ├── raikou-komainu.png
+│       ├── akari-phoenix.png
+│       ├── aoi-seadragon.png
 │       └── tsukimi-nekomata.png
 ├── docs/screenshots/
 │   ├── desktop.png
@@ -133,8 +142,12 @@ tokimeki-draw/
 │   └── mobile.png
 ├── tests/
 │   ├── smoke.mjs
+│   ├── release.mjs
+│   ├── database.mjs
 │   └── capture.mjs
 ├── QA_REPORT.md
+├── RELEASE_SETUP.md
+├── supabase/migrations/202610140001_core.sql
 ├── .openai/hosting.json
 └── README.md
 ```
