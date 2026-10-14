@@ -1,6 +1,6 @@
-# NEON TICKET — ポイ活連動WEBガチャ MVP
+# NEON TICKET — 和幻コレクションWEBガチャ MVP
 
-「チケットを貯める → ガチャを引く → 景品を申請する → 管理画面で確認する」までを約60秒で体験できる、CrowdWorks提案用のレスポンシブデモです。
+妖狐・武者・猫又が登場する和風ゲーム世界で「チケットを貯める → ガチャを引く → 景品を申請する → 管理画面で確認する」までを約60秒で体験できる、CrowdWorks提案用のレスポンシブデモです。
 
 - 公開デモ：<https://tokimeki-draw-mvp.webnexa3114.chatgpt.site>
 - 会員登録・パスワード：不要
@@ -49,7 +49,7 @@ py -m http.server 4173 --directory dist
 
 | エリア | 主な機能 |
 | --- | --- |
-| トップ | チケット残高、3種類のガチャ、残り口数、ラストワン進捗 |
+| トップ | オリジナルキャラクター、チケット残高、3種類の和風ガチャ、残り口数、ラストワン進捗 |
 | チケット獲得 | デイリー20枚、広告30枚、3問アンケート50枚、アプリ条件40枚、共通付与履歴 |
 | ガチャ | 景品ラインナップ、提供割合、1回・10回・100回、消費確認、抽選演出、結果一覧 |
 | ラストワン | 残り3口の専用ガチャ、最後の1口だけ限定景品を一度だけ付与 |
@@ -108,6 +108,10 @@ py -m http.server 4173 --directory dist
 
 ![NEON TICKET スマートフォン表示](docs/screenshots/mobile.png)
 
+### 和幻ガチャ一覧 — 1440px
+
+![NEON TICKET 和幻ガチャ一覧](docs/screenshots/gacha.png)
+
 ## ファイル構成
 
 ```text
@@ -116,12 +120,18 @@ tokimeki-draw/
 │   ├── index.html
 │   ├── styles.css
 │   ├── app.js
-│   └── favicon.svg
+│   ├── favicon.svg
+│   └── assets/
+│       ├── hikari-kitsune.png
+│       ├── kurogane-musha.png
+│       └── tsukimi-nekomata.png
 ├── docs/screenshots/
 │   ├── desktop.png
+│   ├── gacha.png
 │   └── mobile.png
 ├── tests/
-│   └── smoke.mjs
+│   ├── smoke.mjs
+│   └── capture.mjs
 ├── QA_REPORT.md
 ├── .openai/hosting.json
 └── README.md
@@ -133,4 +143,4 @@ tokimeki-draw/
 - [ポイントタウン](https://www.pointtown.com/gacha) — 条件達成型のチケット獲得導線
 - [オリポケ](https://ori-poke.com/) — 獲得景品と発送・交換フロー
 
-機能と情報設計のみを参考にし、ロゴ、画像、キャラクター、固有デザイン、ソースコードは複製していません。NEON TICKETのロゴ、景品ビジュアル、UIはHTML／CSS／SVGで独自に制作しています。
+機能と情報設計のみを参考にし、ロゴ、画像、キャラクター、固有デザイン、ソースコードは複製していません。光狐ヒカリ、黒鉄武者、月見猫又は、この提案デモのために画像生成で制作した完全オリジナルキャラクターです。既存のアニメ・漫画・ゲーム作品およびキャラクターとは関係ありません。

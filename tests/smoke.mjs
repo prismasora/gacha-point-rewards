@@ -104,7 +104,7 @@ async function main() {
     if (entry?.level === 'error' && !String(entry.text).includes('favicon')) browserErrors.push(`log: ${entry.text}`);
   });
   cdp.on('Network.responseReceived', ({ response, type }) => {
-    if (response?.status >= 400 && ['Document', 'Script', 'Stylesheet'].includes(type)) browserErrors.push(`network ${response.status}: ${response.url}`);
+    if (response?.status >= 400 && ['Document', 'Script', 'Stylesheet', 'Image'].includes(type)) browserErrors.push(`network ${response.status}: ${response.url}`);
   });
   cdp.on('Page.javascriptDialogOpening', () => {
     cdp.send('Page.handleJavaScriptDialog', { accept: true }).catch(() => {});
@@ -190,7 +190,7 @@ async function main() {
 
   await fresh();
   let state = await readState();
-  assert(await evaluate(`document.title === 'NEON TICKET | ポイ活連動WEBガチャ'`), 'page title and app boot');
+  assert(await evaluate(`document.title === 'NEON TICKET | 和幻コレクションWEBガチャ'`), 'page title and app boot');
   assert(state.balance === 320 && state.inventory.length === 2, 'baseline balance and inventory');
   assert(state.campaigns.neon.remaining === 840 && state.campaigns.retro.remaining === 180 && state.campaigns.last.remaining === 3, 'baseline campaign stock');
   await click('[data-campaign-card="neon"] [data-draw]');

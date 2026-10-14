@@ -6,34 +6,34 @@
   const MEMBER_ID = 'NT-0284';
 
   const campaigns = {
-    neon: { name: 'スタンダード・パルス', cost: 1, total: 1000, pool: ['neonSSR', 'neonSR', 'neonR1', 'neonR2', 'neonN1', 'neonN2', 'neonN3'] },
-    retro: { name: 'プレミアム・アーケード', cost: 3, total: 300, pool: ['retroSSR', 'retroSR', 'retroR1', 'retroR2', 'retroN1', 'retroN2', 'retroN3'] },
-    last: { name: 'ラスト・スパーク限定', cost: 2, total: 3, lastOne: true, pool: ['lastSSR', 'lastSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] }
+    neon: { name: '妖狐雷光録', cost: 1, total: 1000, pool: ['neonSSR', 'neonSR', 'neonR1', 'neonR2', 'neonN1', 'neonN2', 'neonN3'] },
+    retro: { name: '黒鉄武将伝', cost: 3, total: 300, pool: ['retroSSR', 'retroSR', 'retroR1', 'retroR2', 'retroN1', 'retroN2', 'retroN3'] },
+    last: { name: '月影猫又絵巻', cost: 2, total: 3, lastOne: true, pool: ['lastSSR', 'lastSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] }
   };
 
   const prizes = {
-    neonSSR: { name: 'NEON BEAT ヘッドホン', rarity: 'SSR', icon: '🎧' },
-    neonSR: { name: 'ポータブルスピーカー', rarity: 'SR', icon: '🔊' },
-    neonR1: { name: 'グロータンブラー', rarity: 'R', icon: '🥤' },
-    neonR2: { name: 'ネオンライト', rarity: 'R', icon: '💡' },
-    neonN1: { name: 'ホログラム缶バッジ', rarity: 'N', icon: '✦' },
-    neonN2: { name: '惑星アクリルチャーム', rarity: 'N', icon: '🪐' },
-    neonN3: { name: 'ロゴステッカーセット', rarity: 'N', icon: '⚡' },
-    retroSSR: { name: 'ミニアーケードマシン', rarity: 'SSR', icon: '🕹️' },
-    retroSR: { name: 'レトロゲームパッド', rarity: 'SR', icon: '🎮' },
-    retroR1: { name: 'ピクセルクロック', rarity: 'R', icon: '⏰' },
-    retroR2: { name: 'ゲームポーチ', rarity: 'R', icon: '👾' },
-    retroN1: { name: 'コインキーホルダー', rarity: 'N', icon: '🪙' },
-    retroN2: { name: 'ピクセル缶バッジ', rarity: 'N', icon: '◆' },
-    retroN3: { name: '8bitステッカー', rarity: 'N', icon: '★' },
-    lastSSR: { name: 'ムーンライトランプ', rarity: 'SSR', icon: '🌙' },
-    lastSR: { name: 'アロマディフューザー', rarity: 'SR', icon: '🫧' },
-    lastR1: { name: 'ウォームブランケット', rarity: 'R', icon: '🧶' },
-    lastR2: { name: 'セラミックマグ', rarity: 'R', icon: '☕' },
-    lastN1: { name: 'ルームコースター', rarity: 'N', icon: '◉' },
-    lastN2: { name: 'ハーブサシェ', rarity: 'N', icon: '🌿' },
-    lastN3: { name: 'メッセージカード', rarity: 'N', icon: '💌' },
-    lastBonus: { name: '限定ゴールドスピーカー', rarity: 'LAST', icon: '🏆' }
+    neonSSR: { name: '光狐ヒカリ・限定フィギュア', rarity: 'SSR', icon: '🦊', art: 'assets/hikari-kitsune.png' },
+    neonSR: { name: '蒼炎の勾玉ライト', rarity: 'SR', icon: '🔷' },
+    neonR1: { name: '狐面アクリルスタンド', rarity: 'R', icon: '🎭' },
+    neonR2: { name: '稲妻お守りポーチ', rarity: 'R', icon: '⚡' },
+    neonN1: { name: '光狐ホログラム缶バッジ', rarity: 'N', icon: '✦' },
+    neonN2: { name: '鳥居アクリルチャーム', rarity: 'N', icon: '⛩️' },
+    neonN3: { name: '和紋ステッカーセット', rarity: 'N', icon: '🌸' },
+    retroSSR: { name: '黒鉄武者・甲冑フィギュア', rarity: 'SSR', icon: '⚔️', art: 'assets/kurogane-musha.png' },
+    retroSR: { name: '蒼月刀ミニレプリカ', rarity: 'SR', icon: '🗡️' },
+    retroR1: { name: '三日月兜デスククロック', rarity: 'R', icon: '🌙' },
+    retroR2: { name: '陣羽織ゲームポーチ', rarity: 'R', icon: '🎮' },
+    retroN1: { name: '家紋コインキーホルダー', rarity: 'N', icon: '🪙' },
+    retroN2: { name: '武将紋章ピンバッジ', rarity: 'N', icon: '◆' },
+    retroN3: { name: '合戦ドット絵ステッカー', rarity: 'N', icon: '🏯' },
+    lastSSR: { name: '月見猫又ぬいぐるみ', rarity: 'SSR', icon: '🐈', art: 'assets/tsukimi-nekomata.png' },
+    lastSR: { name: '月鈴ナイトライト', rarity: 'SR', icon: '🔔' },
+    lastR1: { name: '猫又しっぽブランケット', rarity: 'R', icon: '🧶' },
+    lastR2: { name: '月影ねこ茶碗', rarity: 'R', icon: '🍵' },
+    lastN1: { name: '肉球和柄コースター', rarity: 'N', icon: '🐾' },
+    lastN2: { name: '桜香る匂い袋', rarity: 'N', icon: '🌸' },
+    lastN3: { name: '猫又絵巻カード', rarity: 'N', icon: '📜' },
+    lastBonus: { name: '黄金武者兜オブジェ', rarity: 'LAST', icon: '🏯' }
   };
 
   const missionRewards = { daily: 20, ad: 30, survey: 50, app: 40 };
@@ -303,6 +303,12 @@
     return [...groups.values()].sort((a, b) => rarityValue(prizes[b.prizeId].rarity) - rarityValue(prizes[a.prizeId].rarity));
   }
 
+  function prizeVisual(prize, className = 'prize-art-image') {
+    return prize.art
+      ? `<img class="${className}" src="${prize.art}" alt="" aria-hidden="true" loading="lazy">`
+      : `<span aria-hidden="true">${prize.icon}</span>`;
+  }
+
   function renderOwnedPrizes() {
     const container = document.querySelector('.js-owned-prizes');
     const groups = groupInventory(state.inventory);
@@ -313,7 +319,7 @@
     container.innerHTML = groups.slice(0, 6).map(group => {
       const prize = prizes[group.prizeId];
       const statusClass = group.status === '保有中' ? 'ready' : 'pending';
-      return `<article class="owned-prize"><div class="owned-prize-art rarity-${prize.rarity.toLowerCase()}"><span aria-hidden="true">${prize.icon}</span><i>${prize.rarity}</i></div><div class="owned-prize-info"><span>${prize.rarity}</span><div><b>${escapeHtml(prize.name)}</b><small>${formatDate(group.acquiredAt)}獲得・${group.quantity}個</small></div></div><em class="prize-status ${statusClass}">${escapeHtml(group.status)}</em></article>`;
+      return `<article class="owned-prize"><div class="owned-prize-art rarity-${prize.rarity.toLowerCase()}">${prizeVisual(prize)}<i>${prize.rarity}</i></div><div class="owned-prize-info"><span>${prize.rarity}</span><div><b>${escapeHtml(prize.name)}</b><small>${formatDate(group.acquiredAt)}獲得・${group.quantity}個</small></div></div><em class="prize-status ${statusClass}">${escapeHtml(group.status)}</em></article>`;
     }).join('');
   }
 
@@ -322,7 +328,7 @@
     const groups = groupInventory(availableInventory()).map(group => ({ ...group, status: '保有中' }));
     container.innerHTML = groups.map(group => {
       const prize = prizes[group.prizeId];
-      return `<label class="exchange-check"><input type="checkbox" name="prize" value="${group.prizeId}" checked><span class="exchange-check-art" aria-hidden="true">${prize.icon}</span><div><b>${escapeHtml(prize.name)}</b><small>${prize.rarity}・${group.quantity}個をまとめて申請</small></div></label>`;
+      return `<label class="exchange-check"><input type="checkbox" name="prize" value="${group.prizeId}" checked><span class="exchange-check-art" aria-hidden="true">${prizeVisual(prize, 'exchange-prize-image')}</span><div><b>${escapeHtml(prize.name)}</b><small>${prize.rarity}・${group.quantity}個をまとめて申請</small></div></label>`;
     }).join('');
     const empty = exchangeDialog.querySelector('.exchange-empty');
     const content = exchangeDialog.querySelector('.exchange-content');
@@ -403,7 +409,7 @@
     drawDialog.querySelectorAll('.js-campaign-name').forEach(element => { element.textContent = config.name; });
     drawDialog.querySelector('.js-draw-lineup').innerHTML = config.pool.slice(0, 4).map(prizeId => {
       const prize = prizes[prizeId];
-      return `<article class="draw-lineup-item"><span aria-hidden="true">${prize.icon}</span><div><small>${prize.rarity}</small><b>${escapeHtml(prize.name)}</b></div></article>`;
+      return `<article class="draw-lineup-item"><span aria-hidden="true">${prizeVisual(prize, 'lineup-prize-image')}</span><div><small>${prize.rarity}</small><b>${escapeHtml(prize.name)}</b></div></article>`;
     }).join('');
     drawDialog.querySelector('.js-draw-last-note').hidden = !config.lastOne;
     drawDialog.querySelectorAll('input[name="draw-count"]').forEach(radio => {
@@ -481,7 +487,7 @@
 
   function resultCard(id) {
     const prize = prizes[id];
-    return `<article class="result-card" data-rarity="${prize.rarity}"><div class="result-card-art" aria-hidden="true">${prize.icon}</div><div class="result-card-info"><span>${prize.rarity}</span><b>${escapeHtml(prize.name)}</b></div></article>`;
+    return `<article class="result-card" data-rarity="${prize.rarity}"><div class="result-card-art" aria-hidden="true">${prizeVisual(prize, 'result-prize-image')}</div><div class="result-card-info"><span>${prize.rarity}</span><b>${escapeHtml(prize.name)}</b></div></article>`;
   }
 
   function showResults(result) {
@@ -530,7 +536,7 @@
     if (kind === 'last') {
       state.campaigns.last.remaining = 1; state.campaigns.last.active = true; state.campaigns.last.lastOneAwarded = false;
       state.inventory = state.inventory.filter(item => item.prizeId !== 'lastBonus');
-      addAudit('デモプリセット：ラスト・スパークを残り1口に変更'); commit(); closeDialog(demoDialog);
+      addAudit('デモプリセット：月影猫又絵巻を残り1口に変更'); commit(); closeDialog(demoDialog);
       showToast('デモ用に限定ガチャを残り1口へ切り替えました'); openDraw('last', 1); return;
     }
     const count = Number(kind); const needed = count * campaigns.neon.cost;

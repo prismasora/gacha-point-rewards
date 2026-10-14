@@ -5,7 +5,7 @@
 - Node.js：v24.19.0
 - Google Chrome：153.0.8010.52
 - テスト方式：Chrome DevTools Protocolによる実ブラウザ操作
-- 対象：`dist/index.html`、`dist/styles.css`、`dist/app.js`
+- 対象：`dist/index.html`、`dist/styles.css`、`dist/app.js`、`dist/assets/*.png`
 
 ## 検証範囲
 
@@ -24,6 +24,7 @@
 - ガイド進捗、状態リセット、再読み込み後の保存
 - 375px、768px、900px、1440pxでの横あふれとナビゲーション切替
 - ブラウザのコンソールエラー、未処理例外、主要アセットのHTTPエラー
+- オリジナルキャラクター画像のHTTP読み込みとPC／モバイル表示
 
 ## 再実行
 
@@ -45,6 +46,12 @@ google-chrome --headless=new --no-sandbox \
 
 ```bash
 node tests/smoke.mjs
+```
+
+スクリーンショットの再生成：
+
+```bash
+node tests/capture.mjs
 ```
 
 環境を変える場合は `BASE_URL` と `CDP_HOST` を指定できます。

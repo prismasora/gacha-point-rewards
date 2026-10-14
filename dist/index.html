@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1020">
-  <meta name="description" content="毎日のミッションがワクワクに変わる。会員制WEBガチャ「NEON TICKET」のインタラクティブMVPデモです。">
-  <title>NEON TICKET | ポイ活連動WEBガチャ</title>
+  <meta name="theme-color" content="#110d14">
+  <meta name="description" content="妖狐・武者・猫又が彩る、和風ゲーム世界の会員制WEBガチャ「NEON TICKET」インタラクティブMVPデモです。">
+  <title>NEON TICKET | 和幻コレクションWEBガチャ</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
-<body class="neon-theme">
+<body class="neon-theme japanese-theme">
   <a class="skip-link" href="#main">メインコンテンツへ</a>
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 0 5.5 10a2.5 2.5 0 0 0 0 5A2.5 2.5 0 0 0 3 17.5V20h18v-2.5a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 0 0-5V5H3v2.5Z"/><path d="M9 8.5v7M9 18v.1"/></symbol>
@@ -37,7 +37,7 @@
     <div class="header-inner">
       <a class="brand" href="#top" aria-label="NEON TICKET ホーム">
         <span class="brand-mark" aria-hidden="true"><span></span></span>
-        <span class="brand-copy"><b>NEON TICKET</b><small>PREMIUM GACHA</small></span>
+        <span class="brand-copy"><b>NEON TICKET</b><small>和幻コレクション</small></span>
       </a>
 
       <nav class="desktop-nav" aria-label="メインナビゲーション">
@@ -68,9 +68,9 @@
   <main id="main">
     <section class="hero-section" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span></span>PREMIUM ENTERTAINMENT GACHA</div>
-        <h1 id="hero-title"><span>毎日のミッションが、</span><br>ワクワクに変わる。</h1>
-        <p>チケットを集めて、ガチャにチャレンジ。<br class="desktop-only">次の特別な景品を手に入れよう。</p>
+        <div class="eyebrow"><span></span>和幻召喚 / JAPANESE FANTASY GACHA</div>
+        <h1 id="hero-title"><span>日常のひとときが、</span><br>物語に変わる。</h1>
+        <p>任務でチケットを集め、和幻の仲間を召喚。<br class="desktop-only">妖狐、武者、猫又との出会いを楽しもう。</p>
         <div class="hero-actions">
           <button class="button button-primary button-large" type="button" data-draw data-campaign="neon">
             今すぐガチャを引く <svg><use href="#i-arrow"></use></svg>
@@ -80,26 +80,22 @@
         <div class="trust-note"><svg><use href="#i-check"></use></svg>チケットのみで遊べます</div>
       </div>
 
-      <div class="hero-stage" aria-label="ネオン・トレジャー・コレクションの景品イメージ">
+      <div class="hero-stage japanese-stage" aria-label="オリジナルキャラクター、黒鉄武者と光狐ヒカリの限定召喚イメージ">
         <div class="stage-grid"></div>
-        <span class="stage-kicker">NEON TICKET / LIMITED COLLECTION</span>
-        <div class="float-chip float-chip-left"><i></i> ラストワン賞あり</div>
+        <span class="stage-kicker">NEON TICKET / 和幻絵巻</span>
+        <div class="float-chip float-chip-left"><i></i> 完全オリジナルキャラクター</div>
         <div class="float-chip float-chip-right"><svg><use href="#i-clock"></use></svg>10/31 23:59まで</div>
         <div class="prize-orbit">
           <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-          <article class="feature-card card-back" aria-hidden="true"><div class="card-shine"></div></article>
-          <article class="feature-card card-front">
-            <div class="rarity-tag">S PRIZE</div>
-            <div class="product-visual headphones-visual">
-              <span class="headband"></span><span class="ear ear-left"></span><span class="ear ear-right"></span>
-            </div>
-            <div class="feature-card-copy"><small>SSR / ワイヤレスヘッドホン</small><b>NEON BEAT</b></div>
-          </article>
-          <div class="mini-prize mini-one"><span>S</span><b>01</b></div>
-          <div class="mini-prize mini-two"><span>A</span><b>07</b></div>
+          <div class="hero-sun" aria-hidden="true"></div>
+          <div class="hero-cloud cloud-one" aria-hidden="true"></div>
+          <div class="hero-cloud cloud-two" aria-hidden="true"></div>
+          <img class="hero-character hero-musha" src="assets/kurogane-musha.png" alt="三日月兜と青い刀を携えたオリジナルキャラクター、黒鉄武者" width="1024" height="1536" fetchpriority="high">
+          <img class="hero-character hero-kitsune" src="assets/hikari-kitsune.png" alt="三本の尾と青い狐火をまとったオリジナルキャラクター、光狐ヒカリ" width="1243" height="1266" fetchpriority="high">
+          <div class="hero-nameplate"><small>SSR PICK UP</small><b>光狐ヒカリ <i>×</i> 黒鉄武者</b></div>
         </div>
         <div class="stage-footer">
-          <div><small>STANDARD COLLECTION</small><b>スタンダード・パルス</b></div>
+          <div><small>CHAPTER 01 / 妖狐雷光録</small><b>光狐ヒカリを召喚せよ</b></div>
           <div class="ticket-cost"><svg><use href="#i-ticket"></use></svg><b>1</b><small>/ 1回</small></div>
         </div>
       </div>
@@ -131,17 +127,18 @@
 
       <div class="gacha-grid">
         <article class="gacha-card featured-gacha" data-campaign-card="neon">
-          <button class="card-hitarea" type="button" data-draw data-campaign="neon" aria-label="スタンダード・パルスを引く"></button>
+          <button class="card-hitarea" type="button" data-draw data-campaign="neon" aria-label="妖狐雷光録を引く"></button>
           <div class="gacha-art art-neon">
             <div class="art-badge">PICK UP</div>
-            <div class="art-number">01</div>
-            <div class="art-object art-headphones"><span></span><i></i><b></b></div>
+            <div class="art-number">狐</div>
+            <div class="japanese-card-sun" aria-hidden="true"></div>
+            <img class="gacha-character character-kitsune" src="assets/hikari-kitsune.png" alt="光狐ヒカリ" width="1243" height="1266" loading="lazy">
             <div class="spark s1">✦</div><div class="spark s2">✦</div>
           </div>
           <div class="gacha-card-body">
             <div class="gacha-meta"><span>人気</span><small class="js-campaign-status" data-status-for="neon">残り 840 / 1,000口</small></div>
-            <h3>スタンダード・パルス</h3>
-            <p>1枚から楽しめる、音楽と光のスタンダードコレクション。</p>
+            <h3>妖狐雷光録</h3>
+            <p>狐火を操る守護者「光狐ヒカリ」と和小物を集める幻想コレクション。</p>
             <div class="gacha-card-footer">
               <div class="price"><svg><use href="#i-ticket"></use></svg><b>1</b><span>枚 / 1回</span></div>
               <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
@@ -150,17 +147,17 @@
         </article>
 
         <article class="gacha-card" data-campaign-card="retro">
-          <button class="card-hitarea" type="button" data-draw data-campaign="retro" aria-label="プレミアム・アーケードを引く"></button>
+          <button class="card-hitarea" type="button" data-draw data-campaign="retro" aria-label="黒鉄武将伝を引く"></button>
           <div class="gacha-art art-retro">
             <div class="art-badge">NEW</div>
-            <div class="art-number">02</div>
-            <div class="art-object gamepad"><span></span><i></i><b></b><em></em></div>
-            <div class="pixel p1"></div><div class="pixel p2"></div><div class="pixel p3"></div>
+            <div class="art-number">武</div>
+            <div class="japanese-card-sun crimson" aria-hidden="true"></div>
+            <img class="gacha-character character-musha" src="assets/kurogane-musha.png" alt="黒鉄武者" width="1024" height="1536" loading="lazy">
           </div>
           <div class="gacha-card-body">
             <div class="gacha-meta"><span>新着・SSR 1%</span><small class="js-campaign-status" data-status-for="retro">残り 180 / 300口</small></div>
-            <h3>プレミアム・アーケード</h3>
-            <p>高レア景品を狙える、デスクまわりのプレミアムコレクション。</p>
+            <h3>黒鉄武将伝</h3>
+            <p>月影の侍「黒鉄武者」と刀剣ゲームアイテムを狙う武将コレクション。</p>
             <div class="gacha-card-footer">
               <div class="price"><svg><use href="#i-ticket"></use></svg><b>3</b><span>枚 / 1回</span></div>
               <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
@@ -169,17 +166,17 @@
         </article>
 
         <article class="gacha-card last-demo-card" data-campaign-card="last">
-          <button class="card-hitarea" type="button" data-draw data-campaign="last" aria-label="ラスト・スパーク限定ガチャを引く"></button>
+          <button class="card-hitarea" type="button" data-draw data-campaign="last" aria-label="月影猫又絵巻を引く"></button>
           <div class="gacha-art art-cozy art-last">
             <div class="art-badge">LAST 3</div>
-            <div class="art-number">03</div>
-            <div class="art-object lamp"><span></span><i></i><b></b></div>
-            <div class="plant"><i></i><b></b><span></span></div>
+            <div class="art-number">猫</div>
+            <div class="japanese-card-moon" aria-hidden="true"></div>
+            <img class="gacha-character character-nekomata" src="assets/tsukimi-nekomata.png" alt="月見猫又" width="1230" height="1278" loading="lazy">
           </div>
           <div class="gacha-card-body">
             <div class="gacha-meta"><span>ラストワン賞あり</span><small class="js-campaign-status" data-status-for="last">残り 3 / 3口</small></div>
-            <h3>ラスト・スパーク限定</h3>
-            <p>最後の1口で限定ゴールドスピーカーが必ず付くデモ専用ガチャ。</p>
+            <h3>月影猫又絵巻</h3>
+            <p>最後の1口で「黄金武者兜オブジェ」が必ず付くデモ専用ガチャ。</p>
             <div class="gacha-card-footer">
               <div class="price"><svg><use href="#i-ticket"></use></svg><b>2</b><span>枚 / 1回</span></div>
               <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
@@ -191,14 +188,15 @@
 
     <section class="content-section last-one-section" aria-labelledby="last-one-title">
       <div class="last-one-art" aria-hidden="true">
-        <div class="last-label"><small>THE</small><b>LAST</b><strong>ONE</strong></div>
-        <div class="last-product"><div class="speaker"><i></i><span></span><b></b></div></div>
+        <div class="last-label"><small>終ノ一</small><b>LAST</b><strong>ONE</strong></div>
+        <img class="last-character" src="assets/kurogane-musha.png" alt="" width="1024" height="1536" loading="lazy">
+        <div class="last-kabuto"><span></span><i></i><b></b></div>
         <div class="last-glow"></div>
       </div>
       <div class="last-one-copy">
         <div class="eyebrow eyebrow-gold"><span></span>LAST ONE PRIZE</div>
         <h2 id="last-one-title">最後の1口を引くと、<br>特別な景品をプレゼント。</h2>
-        <p>デモ専用「ラスト・スパーク」の最後の1口には、限定ゴールドスピーカーが必ず付いてきます。</p>
+        <p>デモ専用「月影猫又絵巻」の最後の1口には、限定「黄金武者兜オブジェ」が必ず付いてきます。</p>
         <div class="remaining-row">
           <div><small>ラストワン賞まで</small><b>残り <span class="js-last-count">3</span><em>口</em></b></div>
           <span>デモ専用状態</span>
@@ -305,7 +303,7 @@
 
   <footer class="site-footer">
     <div class="footer-top">
-      <a class="brand brand-footer" href="#top"><span class="brand-mark"><span></span></span><span class="brand-copy"><b>NEON TICKET</b><small>PREMIUM GACHA</small></span></a>
+      <a class="brand brand-footer" href="#top"><span class="brand-mark"><span></span></span><span class="brand-copy"><b>NEON TICKET</b><small>和幻コレクション</small></span></a>
       <div class="footer-links"><a href="#" data-demo-link>初めての方へ</a><a href="#" data-demo-link>提供割合・注意事項</a><a href="#" data-demo-link>よくある質問</a><button type="button" data-open-admin>管理デモ</button></div>
     </div>
     <div class="footer-bottom"><p>本サイトは企画提案用のMVPデモです。景品・確率・ユーザー・配送情報はすべて架空のサンプルです。</p><span>© 2026 NEON TICKET — MVP DEMO</span></div>
@@ -323,12 +321,12 @@
     <div class="dialog-shell">
       <button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button>
       <div class="draw-selection" data-draw-step="select">
-        <div class="dialog-heading"><div class="dialog-kicker">CHOOSE YOUR DRAW</div><h2 id="drawTitle">何回引きますか？</h2><p class="js-campaign-name">スタンダード・パルス</p></div>
+        <div class="dialog-heading"><div class="dialog-kicker">CHOOSE YOUR DRAW</div><h2 id="drawTitle">何回召喚しますか？</h2><p class="js-campaign-name">妖狐雷光録</p></div>
         <div class="mini-balance"><div><span>保有チケット</span><b><svg><use href="#i-ticket"></use></svg><span class="js-balance">320</span></b></div><div><span>残り口数</span><b><span class="js-draw-stock">840</span><small>口</small></b></div></div>
         <section class="draw-lineup" aria-label="景品ラインナップ">
           <div class="draw-lineup-head"><span>PRIZE LINEUP</span><small>デモ提供割合：SSR 1%・SR 9%・R 30%・N 60%</small></div>
           <div class="draw-lineup-list js-draw-lineup"></div>
-          <p class="draw-last-note js-draw-last-note" hidden><b>LAST ONE</b> 最後の1口には限定ゴールドスピーカーも付与</p>
+          <p class="draw-last-note js-draw-last-note" hidden><b>LAST ONE</b> 最後の1口には黄金武者兜オブジェも付与</p>
         </section>
         <fieldset class="draw-options">
           <legend class="sr-only">抽選回数を選択</legend>
@@ -344,7 +342,7 @@
 
       <div class="draw-confirm" data-draw-step="confirm" hidden>
         <div class="dialog-heading"><div class="dialog-kicker">FINAL CHECK</div><h2>この内容で引きますか？</h2><p>確定後のキャンセルはできません</p></div>
-        <div class="confirm-card"><span class="confirm-art"><svg><use href="#i-spark"></use></svg></span><div><small class="js-campaign-name">スタンダード・パルス</small><b><span class="js-confirm-count">1</span>回ガチャ</b></div></div>
+        <div class="confirm-card"><span class="confirm-art"><svg><use href="#i-spark"></use></svg></span><div><small class="js-campaign-name">妖狐雷光録</small><b><span class="js-confirm-count">1</span>回召喚</b></div></div>
         <dl class="confirm-list"><div><dt>消費チケット</dt><dd><svg><use href="#i-ticket"></use></svg><span class="js-draw-cost">1</span>枚</dd></div><div><dt>抽選後の残高</dt><dd><span class="js-after-balance">319</span>枚</dd></div></dl>
         <label class="confirm-check"><input type="checkbox" id="understandCheck"><span><svg><use href="#i-check"></use></svg></span><small>提供割合と注意事項を確認しました</small></label>
         <button class="button button-primary button-full button-large js-execute-draw" type="button" disabled>チケットを使って引く</button>
@@ -360,7 +358,7 @@
       <div class="draw-result" data-draw-step="result" hidden>
         <div class="result-burst" aria-hidden="true">✦</div>
         <div class="dialog-heading"><div class="dialog-kicker">DRAW RESULT</div><h2>結果発表！</h2><p><span class="js-result-count">1</span>回分の景品を獲得しました</p></div>
-        <div class="last-bonus-banner js-last-bonus" hidden><span>LAST ONE BONUS</span><b>限定ゴールドスピーカーを獲得！</b></div>
+        <div class="last-bonus-banner js-last-bonus" hidden><span>LAST ONE BONUS</span><b>黄金武者兜オブジェを獲得！</b></div>
         <div class="result-summary js-result-summary"></div>
         <div class="result-cards js-result-cards"></div>
         <button class="show-all-results js-show-all-results" type="button" hidden>全結果を表示する</button>
