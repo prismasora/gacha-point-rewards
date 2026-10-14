@@ -1,0 +1,7 @@
+{
+  "name": "neon-ticket",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/serve.mjs"
+  }
+}

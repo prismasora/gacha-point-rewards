@@ -19,7 +19,17 @@ FVは10秒の動画風召喚ループです。カプセル回転→キャラク�
 
 ビルドやパッケージのインストールは不要です。
 
-macOS / Linux：
+Node.jsがある場合、`tokimeki-draw` フォルダ内のターミナルで次を実行します。`npm install` は不要です。
+
+```bash
+npm start
+```
+
+既にターミナルの現在位置が `tokimeki-draw` なら、もう一度 `cd tokimeki-draw` を実行する必要はありません。サーバー起動中はターミナルを開いたままにしてください。`Ctrl+C` で停止すると、ブラウザには `ERR_CONNECTION_REFUSED` が表示されます。
+
+VS CodeのSSH／リモート環境では「Ports」タブで4173を転送し、表示された転送先URLを開いてください。
+
+Pythonを使用する場合（macOS / Linux）：
 
 ```bash
 cd tokimeki-draw
