@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d0f1c">
+  <meta name="description" content="チケットを貯めて、引いて、景品と交換。会員制WEBガチャ「トキメキくじ」のMVPデモです。">
+  <title>トキメキくじ | ポイ活WEBガチャ</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">メインコンテンツへ</a>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 0 5.5 10a2.5 2.5 0 0 0 0 5A2.5 2.5 0 0 0 3 17.5V20h18v-2.5a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 0 0-5V5H3v2.5Z"/><path d="M9 8.5v7M9 18v.1"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M4 10h16v11H4zM2.5 6h19v4h-19zM12 6v15"/><path d="M12 6H8.5a2.5 2.5 0 1 1 0-5C11 1 12 6 12 6Zm0 0h3.5a2.5 2.5 0 1 0 0-5C13 1 12 6 12 6Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM9.5 21h5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.1"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7M12 11v10"/></symbol>
+  </svg>
+
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="トキメキくじ ホーム">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span class="brand-copy"><b>TOKIMEKI</b><small>トキメキくじ</small></span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="メインナビゲーション">
+        <a class="is-active" href="#top">ホーム</a>
+        <a href="#gacha">ガチャ</a>
+        <a href="#earn">チケットを貯める</a>
+        <a href="#prizes">景品</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="balance-pill" type="button" data-open-earn aria-label="チケット残高。クリックして貯める">
+          <svg><use href="#i-ticket"></use></svg>
+          <span><small>チケット</small><b class="js-balance">420</b></span>
+          <i>＋</i>
+        </button>
+        <button class="icon-button notification-button" type="button" aria-label="お知らせ" data-toast="新しいお知らせはありません">
+          <svg><use href="#i-bell"></use></svg><span></span>
+        </button>
+        <button class="avatar-button" type="button" aria-label="マイページを開く" data-profile>
+          <span>TK</span><svg><use href="#i-chevron"></use></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero-section" id="top" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span>本日のピックアップ</div>
+        <h1 id="hero-title"><span>ひらくたび、</span><br>“好き”に出会う。</h1>
+        <p>ミッションでチケットを貯めて、限定アイテムを狙おう。<br class="desktop-only">1枚から遊べる、会員制WEBガチャ。</p>
+        <div class="hero-actions">
+          <button class="button button-primary button-large" type="button" data-draw data-campaign="neon">
+            今すぐガチャを引く <svg><use href="#i-arrow"></use></svg>
+          </button>
+          <a class="button button-ghost button-large" href="#gacha">開催中を見る</a>
+        </div>
+        <div class="trust-note"><svg><use href="#i-check"></use></svg>チケットのみで遊べます</div>
+      </div>
+
+      <div class="hero-stage" aria-label="ネオン・トレジャー・コレクションの景品イメージ">
+        <div class="stage-grid"></div>
+        <span class="stage-kicker">LIMITED COLLECTION</span>
+        <div class="float-chip float-chip-left"><i></i> ラストワン賞あり</div>
+        <div class="float-chip float-chip-right"><svg><use href="#i-clock"></use></svg>10/31 23:59まで</div>
+        <div class="prize-orbit">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <article class="feature-card card-back" aria-hidden="true"><div class="card-shine"></div></article>
+          <article class="feature-card card-front">
+            <div class="rarity-tag">S PRIZE</div>
+            <div class="product-visual headphones-visual">
+              <span class="headband"></span><span class="ear ear-left"></span><span class="ear ear-right"></span>
+            </div>
+            <div class="feature-card-copy"><small>ワイヤレスヘッドホン</small><b>NEON BEAT</b></div>
+          </article>
+          <div class="mini-prize mini-one"><span>S</span><b>01</b></div>
+          <div class="mini-prize mini-two"><span>A</span><b>07</b></div>
+        </div>
+        <div class="stage-footer">
+          <div><small>NEON TREASURE</small><b>ネオン・トレジャー</b></div>
+          <div class="ticket-cost"><svg><use href="#i-ticket"></use></svg><b>1</b><small>/ 1回</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="status-section" aria-label="アカウント状況">
+      <article class="status-card">
+        <div class="status-icon violet"><svg><use href="#i-ticket"></use></svg></div>
+        <div><small>保有チケット</small><b><span class="js-balance">420</span><em>枚</em></b></div>
+        <button type="button" data-open-earn>貯める <svg><use href="#i-chevron"></use></svg></button>
+      </article>
+      <article class="status-card">
+        <div class="status-icon mint"><svg><use href="#i-bolt"></use></svg></div>
+        <div><small>挑戦できるミッション</small><b><span class="js-missions">3</span><em>件</em></b></div>
+        <a href="#earn">確認する <svg><use href="#i-chevron"></use></svg></a>
+      </article>
+      <article class="status-card">
+        <div class="status-icon coral"><svg><use href="#i-gift"></use></svg></div>
+        <div><small>交換できる景品</small><b><span class="js-prize-count">2</span><em>個</em></b></div>
+        <a href="#prizes">景品BOX <svg><use href="#i-chevron"></use></svg></a>
+      </article>
+    </section>
+
+    <section class="content-section" id="gacha" aria-labelledby="gacha-title">
+      <div class="section-heading">
+        <div><span class="section-index">01</span><h2 id="gacha-title">開催中のガチャ</h2></div>
+        <p>気になるコレクションを選んで<br>1回からチャレンジ。</p>
+      </div>
+
+      <div class="gacha-grid">
+        <article class="gacha-card featured-gacha" data-campaign-card="neon">
+          <button class="card-hitarea" type="button" data-draw data-campaign="neon" aria-label="ネオン・トレジャーを引く"></button>
+          <div class="gacha-art art-neon">
+            <div class="art-badge">PICK UP</div>
+            <div class="art-number">01</div>
+            <div class="art-object art-headphones"><span></span><i></i><b></b></div>
+            <div class="spark s1">✦</div><div class="spark s2">✦</div>
+          </div>
+          <div class="gacha-card-body">
+            <div class="gacha-meta"><span>ラストワン賞あり</span><small>10/31 23:59まで</small></div>
+            <h3>ネオン・トレジャー</h3>
+            <p>音楽と光をテーマにした限定ガジェットコレクション。</p>
+            <div class="gacha-card-footer">
+              <div class="price"><svg><use href="#i-ticket"></use></svg><b>1</b><span>枚 / 1回</span></div>
+              <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gacha-card" data-campaign-card="retro">
+          <button class="card-hitarea" type="button" data-draw data-campaign="retro" aria-label="レトロ・ゲーム・クラブを引く"></button>
+          <div class="gacha-art art-retro">
+            <div class="art-badge">NEW</div>
+            <div class="art-number">02</div>
+            <div class="art-object gamepad"><span></span><i></i><b></b><em></em></div>
+            <div class="pixel p1"></div><div class="pixel p2"></div><div class="pixel p3"></div>
+          </div>
+          <div class="gacha-card-body">
+            <div class="gacha-meta"><span>新着</span><small>11/08 23:59まで</small></div>
+            <h3>レトロ・ゲーム・クラブ</h3>
+            <p>懐かしくて新しい、デスクまわりの遊べるアイテム。</p>
+            <div class="gacha-card-footer">
+              <div class="price"><svg><use href="#i-ticket"></use></svg><b>2</b><span>枚 / 1回</span></div>
+              <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gacha-card" data-campaign-card="cozy">
+          <button class="card-hitarea" type="button" data-draw data-campaign="cozy" aria-label="コージー・ルームを引く"></button>
+          <div class="gacha-art art-cozy">
+            <div class="art-badge">POPULAR</div>
+            <div class="art-number">03</div>
+            <div class="art-object lamp"><span></span><i></i><b></b></div>
+            <div class="plant"><i></i><b></b><span></span></div>
+          </div>
+          <div class="gacha-card-body">
+            <div class="gacha-meta"><span>人気</span><small>11/15 23:59まで</small></div>
+            <h3>コージー・ルーム</h3>
+            <p>いつもの部屋を少し好きになる、暮らしのセレクション。</p>
+            <div class="gacha-card-footer">
+              <div class="price"><svg><use href="#i-ticket"></use></svg><b>1</b><span>枚 / 1回</span></div>
+              <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section last-one-section" aria-labelledby="last-one-title">
+      <div class="last-one-art" aria-hidden="true">
+        <div class="last-label"><small>THE</small><b>LAST</b><strong>ONE</strong></div>
+        <div class="last-product"><div class="speaker"><i></i><span></span><b></b></div></div>
+        <div class="last-glow"></div>
+      </div>
+      <div class="last-one-copy">
+        <div class="eyebrow eyebrow-gold"><span></span>LAST ONE PRIZE</div>
+        <h2 id="last-one-title">最後の1口を引くと、<br>特別な景品をプレゼント。</h2>
+        <p>ネオン・トレジャーの最後の1口には、限定カラーのポータブルスピーカーが付いてきます。</p>
+        <div class="remaining-row">
+          <div><small>ラストワン賞まで</small><b>残り <span class="js-last-count">327</span><em>口</em></b></div>
+          <span>デモ更新</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="ラストワン賞までの販売進捗" aria-valuemin="0" aria-valuemax="500" aria-valuenow="173"><span class="js-last-progress"></span></div>
+        <button class="text-link" type="button" data-draw data-campaign="neon">このガチャを引く <svg><use href="#i-arrow"></use></svg></button>
+      </div>
+    </section>
+
+    <section class="content-section earn-section" id="earn" aria-labelledby="earn-title">
+      <div class="section-heading">
+        <div><span class="section-index">02</span><h2 id="earn-title">チケットを貯める</h2></div>
+        <p>スキマ時間のミッションで、<br>ガチャをもっと楽しもう。</p>
+      </div>
+
+      <div class="earn-layout">
+        <aside class="daily-card">
+          <div class="daily-top"><span>DAILY BONUS</span><small>あと <b id="dailyHours">08:42</b></small></div>
+          <div class="daily-stamp">
+            <div class="stamp-day done"><span><svg><use href="#i-check"></use></svg></span><small>1日目</small></div>
+            <div class="stamp-line done"></div>
+            <div class="stamp-day done"><span><svg><use href="#i-check"></use></svg></span><small>2日目</small></div>
+            <div class="stamp-line"></div>
+            <div class="stamp-day current"><span>3</span><small>今日</small></div>
+            <div class="stamp-line"></div>
+            <div class="stamp-day"><span>4</span><small>4日目</small></div>
+            <div class="stamp-line"></div>
+            <div class="stamp-day special"><span>+5</span><small>5日目</small></div>
+          </div>
+          <button class="button button-light js-daily-button" type="button">今日の1枚を受け取る</button>
+        </aside>
+
+        <div class="mission-panel">
+          <div class="tabs" role="tablist" aria-label="ミッションカテゴリー">
+            <button class="is-active" role="tab" aria-selected="true" data-filter="all" type="button">おすすめ</button>
+            <button role="tab" aria-selected="false" data-filter="app" type="button">アプリ</button>
+            <button role="tab" aria-selected="false" data-filter="survey" type="button">アンケート</button>
+          </div>
+          <div class="mission-list">
+            <article class="mission-item" data-type="survey" data-mission="profile">
+              <div class="mission-logo logo-profile"><svg><use href="#i-user"></use></svg></div>
+              <div class="mission-copy"><span>かんたん・約1分</span><h3>プロフィールを完成させる</h3><p>好きなカテゴリーを3つ選ぶだけ</p></div>
+              <div class="mission-reward"><small>獲得</small><b><svg><use href="#i-ticket"></use></svg>10</b></div>
+              <button type="button" class="mission-action" data-complete-mission="profile">挑戦する</button>
+            </article>
+            <article class="mission-item" data-type="survey" data-mission="survey">
+              <div class="mission-logo logo-survey"><span>Q</span></div>
+              <div class="mission-copy"><span>アンケート・約3分</span><h3>エンタメに関するアンケート</h3><p>全8問・いつでも回答できます</p></div>
+              <div class="mission-reward"><small>獲得</small><b><svg><use href="#i-ticket"></use></svg>15</b></div>
+              <button type="button" class="mission-action" data-complete-mission="survey">回答する</button>
+            </article>
+            <article class="mission-item" data-type="app" data-mission="app">
+              <div class="mission-logo logo-app"><span>♪</span></div>
+              <div class="mission-copy"><span>アプリ・初回限定</span><h3>対象アプリを起動してみる</h3><p>条件達成の確認後に付与されます</p></div>
+              <div class="mission-reward"><small>獲得</small><b><svg><use href="#i-ticket"></use></svg>30</b></div>
+              <button type="button" class="mission-action" data-complete-mission="app">条件を見る</button>
+            </article>
+          </div>
+          <p class="mission-disclaimer"><svg><use href="#i-info"></use></svg>ミッションの付与条件・反映時間は各詳細画面でご確認ください。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section prizes-section" id="prizes" aria-labelledby="prizes-title">
+      <div class="section-heading prizes-heading">
+        <div><span class="section-index">03</span><h2 id="prizes-title">あなたの景品BOX</h2></div>
+        <button class="button button-ghost-dark" type="button" data-open-exchange>交換履歴を見る</button>
+      </div>
+      <div class="prize-box">
+        <div class="prize-summary">
+          <div class="summary-number"><small>交換できる景品</small><b><span class="js-prize-count">2</span><em>個</em></b></div>
+          <p>獲得した景品は、まとめて交換申請できます。</p>
+          <button class="button button-primary button-large" type="button" data-open-exchange>景品を交換する <svg><use href="#i-arrow"></use></svg></button>
+        </div>
+        <div class="owned-prizes js-owned-prizes" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="cta-section" aria-labelledby="cta-title">
+      <div class="cta-stars" aria-hidden="true">✦ <span>✦</span> ✦</div>
+      <div><span>READY TO DRAW?</span><h2 id="cta-title">次の“好き”を、引きにいこう。</h2></div>
+      <button class="button button-white button-large" type="button" data-draw data-campaign="neon">ガチャを引く <svg><use href="#i-arrow"></use></svg></button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <a class="brand brand-footer" href="#top"><span class="brand-mark"><span></span></span><span class="brand-copy"><b>TOKIMEKI</b><small>トキメキくじ</small></span></a>
+      <div class="footer-links"><a href="#" data-demo-link>初めての方へ</a><a href="#" data-demo-link>提供割合・注意事項</a><a href="#" data-demo-link>よくある質問</a><a href="#" data-demo-link>お問い合わせ</a></div>
+    </div>
+    <div class="footer-bottom"><p>本サイトは企画提案用のMVPデモです。掲載の景品・提供割合・期限はすべてサンプルです。</p><span>© 2026 TOKIMEKI DRAW — MVP DEMO</span></div>
+  </footer>
+
+  <nav class="mobile-nav" aria-label="モバイルナビゲーション">
+    <a class="is-active" href="#top"><svg><use href="#i-home"></use></svg><span>ホーム</span></a>
+    <button type="button" data-draw data-campaign="neon"><svg><use href="#i-spark"></use></svg><span>ガチャ</span></button>
+    <a href="#earn"><svg><use href="#i-bolt"></use></svg><span>貯める</span></a>
+    <a href="#prizes"><svg><use href="#i-gift"></use></svg><span>景品</span></a>
+    <button type="button" data-profile><svg><use href="#i-user"></use></svg><span>マイページ</span></button>
+  </nav>
+
+  <dialog class="app-dialog draw-dialog" id="drawDialog" aria-labelledby="drawTitle">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button>
+      <div class="draw-selection" data-draw-step="select">
+        <div class="dialog-heading"><div class="dialog-kicker">CHOOSE YOUR DRAW</div><h2 id="drawTitle">何回引きますか？</h2><p class="js-campaign-name">ネオン・トレジャー</p></div>
+        <div class="mini-balance"><span>保有チケット</span><b><svg><use href="#i-ticket"></use></svg><span class="js-balance">420</span></b></div>
+        <fieldset class="draw-options">
+          <legend class="sr-only">抽選回数を選択</legend>
+          <label class="draw-option is-selected"><input type="radio" name="draw-count" value="1" checked><span><small>気軽に</small><b>1<em>回</em></b><i><svg><use href="#i-ticket"></use></svg><strong class="js-cost-1">1</strong>枚</i></span></label>
+          <label class="draw-option"><input type="radio" name="draw-count" value="10"><span><small>まとめて</small><b>10<em>回</em></b><i><svg><use href="#i-ticket"></use></svg><strong class="js-cost-10">10</strong>枚</i></span></label>
+          <label class="draw-option"><input type="radio" name="draw-count" value="100"><span><small>一気に</small><b>100<em>回</em></b><i><svg><use href="#i-ticket"></use></svg><strong class="js-cost-100">100</strong>枚</i></span></label>
+        </fieldset>
+        <div class="cost-summary"><div><span>消費チケット</span><b><span class="js-draw-cost">1</span>枚</b></div><div><span>抽選後の残高</span><b><span class="js-after-balance">419</span>枚</b></div></div>
+        <button class="button button-primary button-full button-large js-confirm-draw" type="button">内容を確認する <svg><use href="#i-arrow"></use></svg></button>
+        <button class="odds-link" type="button" data-odds>提供割合・注意事項を確認</button>
+      </div>
+
+      <div class="draw-confirm" data-draw-step="confirm" hidden>
+        <div class="dialog-heading"><div class="dialog-kicker">FINAL CHECK</div><h2>この内容で引きますか？</h2><p>確定後のキャンセルはできません</p></div>
+        <div class="confirm-card"><span class="confirm-art"><svg><use href="#i-spark"></use></svg></span><div><small class="js-campaign-name">ネオン・トレジャー</small><b><span class="js-confirm-count">1</span>回ガチャ</b></div></div>
+        <dl class="confirm-list"><div><dt>消費チケット</dt><dd><svg><use href="#i-ticket"></use></svg><span class="js-draw-cost">1</span>枚</dd></div><div><dt>抽選後の残高</dt><dd><span class="js-after-balance">419</span>枚</dd></div></dl>
+        <label class="confirm-check"><input type="checkbox" id="understandCheck"><span><svg><use href="#i-check"></use></svg></span><small>提供割合と注意事項を確認しました</small></label>
+        <button class="button button-primary button-full button-large js-execute-draw" type="button" disabled>チケットを使って引く</button>
+        <button class="back-link js-back-select" type="button">回数を選び直す</button>
+      </div>
+
+      <div class="draw-animation" data-draw-step="animation" hidden aria-live="polite">
+        <button class="skip-button js-skip" type="button">SKIP</button>
+        <div class="portal"><span class="portal-ring r1"></span><span class="portal-ring r2"></span><span class="portal-ring r3"></span><div class="portal-core"><svg><use href="#i-spark"></use></svg></div></div>
+        <h2>トキメキを抽選中…</h2><p>画面を閉じずにお待ちください</p>
+      </div>
+
+      <div class="draw-result" data-draw-step="result" hidden>
+        <div class="result-burst" aria-hidden="true">✦</div>
+        <div class="dialog-heading"><div class="dialog-kicker">DRAW RESULT</div><h2>結果発表！</h2><p><span class="js-result-count">1</span>回分の景品を獲得しました</p></div>
+        <div class="result-summary js-result-summary"></div>
+        <div class="result-cards js-result-cards"></div>
+        <div class="result-actions"><button class="button button-primary button-full" type="button" data-close-dialog>景品BOXに保存して閉じる</button><button class="button button-ghost-dark button-full js-draw-again" type="button">もう一度引く</button></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="app-dialog exchange-dialog" id="exchangeDialog" aria-labelledby="exchangeTitle">
+    <form class="dialog-shell" id="exchangeForm" method="dialog">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button>
+      <div class="dialog-heading"><div class="dialog-kicker">PRIZE EXCHANGE</div><h2 id="exchangeTitle">景品交換の申請</h2><p>交換する景品とお届け先を確認してください</p></div>
+      <div class="exchange-empty" hidden><svg><use href="#i-box"></use></svg><h3>交換できる景品がありません</h3><p>ガチャで獲得した景品がここに表示されます。</p></div>
+      <div class="exchange-content">
+        <fieldset class="exchange-prize-list"><legend>交換する景品</legend><div class="js-exchange-items"></div></fieldset>
+        <div class="form-grid">
+          <label><span>お名前</span><input name="name" autocomplete="name" placeholder="例：ときめき 太郎" required></label>
+          <label><span>郵便番号</span><input name="postal" inputmode="numeric" autocomplete="postal-code" placeholder="123-4567" pattern="[0-9]{3}-?[0-9]{4}" required></label>
+          <label class="full"><span>お届け先住所</span><input name="address" autocomplete="street-address" placeholder="都道府県・市区町村・番地" required></label>
+        </div>
+        <p class="form-note"><svg><use href="#i-info"></use></svg>これはMVPデモです。入力内容の送信・保存は行いません。</p>
+        <button class="button button-primary button-full button-large" type="submit">内容を確認して申請する</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog profile-dialog" id="profileDialog" aria-labelledby="profileTitle">
+    <div class="dialog-shell compact-shell">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="閉じる"><svg><use href="#i-close"></use></svg></button>
+      <div class="profile-head"><div class="profile-avatar">TK</div><div><small>DEMO MEMBER</small><h2 id="profileTitle">ときめきさん</h2><p>会員ID：TK-0284</p></div></div>
+      <div class="profile-stats"><div><small>チケット</small><b><span class="js-balance">420</span>枚</b></div><div><small>景品BOX</small><b><span class="js-prize-count">2</span>個</b></div></div>
+      <button class="profile-row" type="button" data-toast="会員情報ページは本実装時に接続します">会員情報 <svg><use href="#i-chevron"></use></svg></button>
+      <button class="profile-row" type="button" data-toast="抽選履歴ページは本実装時に接続します">抽選履歴 <svg><use href="#i-chevron"></use></svg></button>
+      <button class="profile-row" type="button" data-toast="設定ページは本実装時に接続します">通知・設定 <svg><use href="#i-chevron"></use></svg></button>
+      <div class="demo-reset"><p>デモの状態を初期化できます。</p><button type="button" id="resetDemo">デモデータをリセット</button></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon"><svg><use href="#i-check"></use></svg></span><p></p></div>
+  <div class="sr-only" id="liveRegion" aria-live="assertive"></div>
+</body>
+</html>
