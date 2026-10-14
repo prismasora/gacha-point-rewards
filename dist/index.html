@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#110d14">
-  <meta name="description" content="妖狐・武者・猫又が彩る、和風ゲーム世界の会員制WEBガチャ「NEON TICKET」インタラクティブMVPデモです。">
+  <meta name="description" content="妖狐・狛犬・猫又が彩る、和風ゲーム世界の会員制WEBガチャ「NEON TICKET」インタラクティブMVPデモです。">
   <title>NEON TICKET | 和幻コレクションWEBガチャ</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
@@ -70,7 +70,7 @@
       <div class="hero-copy">
         <div class="eyebrow"><span></span>和幻召喚 / JAPANESE FANTASY GACHA</div>
         <h1 id="hero-title"><span>日常のひとときが、</span><br>物語に変わる。</h1>
-        <p>任務でチケットを集め、和幻の仲間を召喚。<br class="desktop-only">妖狐、武者、猫又との出会いを楽しもう。</p>
+        <p>任務でチケットを集め、和幻の仲間を召喚。<br class="desktop-only">妖狐、狛犬、猫又との出会いを楽しもう。</p>
         <div class="hero-actions">
           <button class="button button-primary button-large" type="button" data-draw data-campaign="neon">
             今すぐガチャを引く <svg><use href="#i-arrow"></use></svg>
@@ -80,7 +80,8 @@
         <div class="trust-note"><svg><use href="#i-check"></use></svg>チケットのみで遊べます</div>
       </div>
 
-      <div class="hero-stage japanese-stage" aria-label="オリジナルキャラクター、黒鉄武者と光狐ヒカリの限定召喚イメージ">
+      <div class="hero-stage japanese-stage" aria-label="オリジナルキャラクター、雷光狛犬と光狐ヒカリの限定召喚イメージ">
+        <canvas id="three-stage" aria-hidden="true"></canvas>
         <div class="stage-grid"></div>
         <span class="stage-kicker">NEON TICKET / 和幻絵巻</span>
         <div class="float-chip float-chip-left"><i></i> 完全オリジナルキャラクター</div>
@@ -90,9 +91,9 @@
           <div class="hero-sun" aria-hidden="true"></div>
           <div class="hero-cloud cloud-one" aria-hidden="true"></div>
           <div class="hero-cloud cloud-two" aria-hidden="true"></div>
-          <img class="hero-character hero-musha" src="assets/kurogane-musha.png" alt="三日月兜と青い刀を携えたオリジナルキャラクター、黒鉄武者" width="1024" height="1536" fetchpriority="high">
+          <img class="hero-character hero-musha" src="assets/raikou-komainu.png" alt="青い雷光をまとったオリジナルキャラクター、雷光狛犬" width="1312" height="1199" fetchpriority="high">
           <img class="hero-character hero-kitsune" src="assets/hikari-kitsune.png" alt="三本の尾と青い狐火をまとったオリジナルキャラクター、光狐ヒカリ" width="1243" height="1266" fetchpriority="high">
-          <div class="hero-nameplate"><small>SSR PICK UP</small><b>光狐ヒカリ <i>×</i> 黒鉄武者</b></div>
+          <div class="hero-nameplate"><small>SSR PICK UP</small><b>光狐ヒカリ <i>×</i> 雷光狛犬</b></div>
         </div>
         <div class="stage-footer">
           <div><small>CHAPTER 01 / 妖狐雷光録</small><b>光狐ヒカリを召喚せよ</b></div>
@@ -147,17 +148,17 @@
         </article>
 
         <article class="gacha-card" data-campaign-card="retro">
-          <button class="card-hitarea" type="button" data-draw data-campaign="retro" aria-label="黒鉄武将伝を引く"></button>
+          <button class="card-hitarea" type="button" data-draw data-campaign="retro" aria-label="雷光狛犬絵巻を引く"></button>
           <div class="gacha-art art-retro">
             <div class="art-badge">NEW</div>
             <div class="art-number">武</div>
             <div class="japanese-card-sun crimson" aria-hidden="true"></div>
-            <img class="gacha-character character-musha" src="assets/kurogane-musha.png" alt="黒鉄武者" width="1024" height="1536" loading="lazy">
+            <img class="gacha-character character-musha" src="assets/raikou-komainu.png" alt="雷光狛犬" width="1312" height="1199" loading="lazy">
           </div>
           <div class="gacha-card-body">
             <div class="gacha-meta"><span>新着・SSR 1%</span><small class="js-campaign-status" data-status-for="retro">残り 180 / 300口</small></div>
-            <h3>黒鉄武将伝</h3>
-            <p>月影の侍「黒鉄武者」と刀剣ゲームアイテムを狙う武将コレクション。</p>
+            <h3>雷光狛犬絵巻</h3>
+            <p>神社を守る雷光狛犬と、和風ゲームのお守りアイテムを集めるコレクション。</p>
             <div class="gacha-card-footer">
               <div class="price"><svg><use href="#i-ticket"></use></svg><b>3</b><span>枚 / 1回</span></div>
               <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
@@ -176,7 +177,7 @@
           <div class="gacha-card-body">
             <div class="gacha-meta"><span>ラストワン賞あり</span><small class="js-campaign-status" data-status-for="last">残り 3 / 3口</small></div>
             <h3>月影猫又絵巻</h3>
-            <p>最後の1口で「黄金武者兜オブジェ」が必ず付くデモ専用ガチャ。</p>
+            <p>最後の1口で「黄金狛犬ミニオブジェ」が必ず付くデモ専用ガチャ。</p>
             <div class="gacha-card-footer">
               <div class="price"><svg><use href="#i-ticket"></use></svg><b>2</b><span>枚 / 1回</span></div>
               <span class="round-arrow"><svg><use href="#i-arrow"></use></svg></span>
@@ -189,14 +190,14 @@
     <section class="content-section last-one-section" aria-labelledby="last-one-title">
       <div class="last-one-art" aria-hidden="true">
         <div class="last-label"><small>終ノ一</small><b>LAST</b><strong>ONE</strong></div>
-        <img class="last-character" src="assets/kurogane-musha.png" alt="" width="1024" height="1536" loading="lazy">
-        <div class="last-kabuto"><span></span><i></i><b></b></div>
+        <img class="last-character" src="assets/raikou-komainu.png" alt="" width="1312" height="1199" loading="lazy">
+        <div class="last-kabuto komainu-object"><span></span><i></i><b></b></div>
         <div class="last-glow"></div>
       </div>
       <div class="last-one-copy">
         <div class="eyebrow eyebrow-gold"><span></span>LAST ONE PRIZE</div>
         <h2 id="last-one-title">最後の1口を引くと、<br>特別な景品をプレゼント。</h2>
-        <p>デモ専用「月影猫又絵巻」の最後の1口には、限定「黄金武者兜オブジェ」が必ず付いてきます。</p>
+        <p>デモ専用「月影猫又絵巻」の最後の1口には、限定「黄金狛犬ミニオブジェ」が必ず付いてきます。</p>
         <div class="remaining-row">
           <div><small>ラストワン賞まで</small><b>残り <span class="js-last-count">3</span><em>口</em></b></div>
           <span>デモ専用状態</span>
@@ -326,7 +327,7 @@
         <section class="draw-lineup" aria-label="景品ラインナップ">
           <div class="draw-lineup-head"><span>PRIZE LINEUP</span><small>デモ提供割合：SSR 1%・SR 9%・R 30%・N 60%</small></div>
           <div class="draw-lineup-list js-draw-lineup"></div>
-          <p class="draw-last-note js-draw-last-note" hidden><b>LAST ONE</b> 最後の1口には黄金武者兜オブジェも付与</p>
+          <p class="draw-last-note js-draw-last-note" hidden><b>LAST ONE</b> 最後の1口には黄金狛犬ミニオブジェも付与</p>
         </section>
         <fieldset class="draw-options">
           <legend class="sr-only">抽選回数を選択</legend>
@@ -358,7 +359,7 @@
       <div class="draw-result" data-draw-step="result" hidden>
         <div class="result-burst" aria-hidden="true">✦</div>
         <div class="dialog-heading"><div class="dialog-kicker">DRAW RESULT</div><h2>結果発表！</h2><p><span class="js-result-count">1</span>回分の景品を獲得しました</p></div>
-        <div class="last-bonus-banner js-last-bonus" hidden><span>LAST ONE BONUS</span><b>黄金武者兜オブジェを獲得！</b></div>
+        <div class="last-bonus-banner js-last-bonus" hidden><span>LAST ONE BONUS</span><b>黄金狛犬ミニオブジェを獲得！</b></div>
         <div class="result-summary js-result-summary"></div>
         <div class="result-cards js-result-cards"></div>
         <button class="show-all-results js-show-all-results" type="button" hidden>全結果を表示する</button>
@@ -484,5 +485,40 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon"><svg><use href="#i-check"></use></svg></span><p></p></div>
   <div class="sr-only" id="liveRegion" aria-live="assertive"></div>
+  <script type="module">
+    // Optional Three.js enhancement: the page remains fully functional when WebGL/CDN is unavailable.
+    (async () => {
+      const canvas = document.querySelector('#three-stage');
+      if (!canvas) return;
+      try {
+        const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.z = 8;
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        const group = new THREE.Group();
+        scene.add(group);
+        const geometry = new THREE.TorusGeometry(2.55, 0.008, 8, 96);
+        const material = new THREE.MeshBasicMaterial({ color: 0xe2b85d, transparent: true, opacity: 0.35 });
+        group.add(new THREE.Mesh(geometry, material));
+        const dots = new THREE.BufferGeometry();
+        const positions = new Float32Array(150 * 3);
+        for (let i = 0; i < positions.length; i += 3) {
+          const radius = 2.7 + Math.random() * 1.8;
+          const angle = Math.random() * Math.PI * 2;
+          positions[i] = Math.cos(angle) * radius;
+          positions[i + 1] = (Math.random() - 0.5) * 3.5;
+          positions[i + 2] = Math.sin(angle) * radius * 0.35;
+        }
+        dots.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        group.add(new THREE.Points(dots, new THREE.PointsMaterial({ color: 0x79d8de, size: 0.035, transparent: true, opacity: 0.75 })));
+        const resize = () => { const box = canvas.parentElement.getBoundingClientRect(); renderer.setSize(box.width, box.height, false); camera.aspect = box.width / box.height; camera.updateProjectionMatrix(); };
+        resize(); window.addEventListener('resize', resize, { passive: true });
+        const tick = time => { group.rotation.y = time * 0.00008; group.rotation.x = Math.sin(time * 0.0002) * 0.06; renderer.render(scene, camera); requestAnimationFrame(tick); };
+        canvas.classList.add('is-ready'); requestAnimationFrame(tick);
+      } catch { canvas.classList.add('is-fallback'); }
+    })();
+  </script>
 </body>
 </html>

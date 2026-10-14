@@ -7,7 +7,7 @@
 
   const campaigns = {
     neon: { name: '妖狐雷光録', cost: 1, total: 1000, pool: ['neonSSR', 'neonSR', 'neonR1', 'neonR2', 'neonN1', 'neonN2', 'neonN3'] },
-    retro: { name: '黒鉄武将伝', cost: 3, total: 300, pool: ['retroSSR', 'retroSR', 'retroR1', 'retroR2', 'retroN1', 'retroN2', 'retroN3'] },
+    retro: { name: '雷光狛犬絵巻', cost: 3, total: 300, pool: ['retroSSR', 'retroSR', 'retroR1', 'retroR2', 'retroN1', 'retroN2', 'retroN3'] },
     last: { name: '月影猫又絵巻', cost: 2, total: 3, lastOne: true, pool: ['lastSSR', 'lastSR', 'lastR1', 'lastR2', 'lastN1', 'lastN2', 'lastN3'] }
   };
 
@@ -19,13 +19,13 @@
     neonN1: { name: '光狐ホログラム缶バッジ', rarity: 'N', icon: '✦' },
     neonN2: { name: '鳥居アクリルチャーム', rarity: 'N', icon: '⛩️' },
     neonN3: { name: '和紋ステッカーセット', rarity: 'N', icon: '🌸' },
-    retroSSR: { name: '黒鉄武者・甲冑フィギュア', rarity: 'SSR', icon: '⚔️', art: 'assets/kurogane-musha.png' },
-    retroSR: { name: '蒼月刀ミニレプリカ', rarity: 'SR', icon: '🗡️' },
-    retroR1: { name: '三日月兜デスククロック', rarity: 'R', icon: '🌙' },
-    retroR2: { name: '陣羽織ゲームポーチ', rarity: 'R', icon: '🎮' },
-    retroN1: { name: '家紋コインキーホルダー', rarity: 'N', icon: '🪙' },
-    retroN2: { name: '武将紋章ピンバッジ', rarity: 'N', icon: '◆' },
-    retroN3: { name: '合戦ドット絵ステッカー', rarity: 'N', icon: '🏯' },
+    retroSSR: { name: '雷光狛犬・限定フィギュア', rarity: 'SSR', icon: '🐕', art: 'assets/raikou-komainu.png' },
+    retroSR: { name: '蒼雷お守りライト', rarity: 'SR', icon: '🔷' },
+    retroR1: { name: '狛犬鈴デスクオブジェ', rarity: 'R', icon: '🔔' },
+    retroR2: { name: '神社めぐりゲームポーチ', rarity: 'R', icon: '🎮' },
+    retroN1: { name: '雷紋コインキーホルダー', rarity: 'N', icon: '🪙' },
+    retroN2: { name: '狛犬紋章ピンバッジ', rarity: 'N', icon: '◆' },
+    retroN3: { name: '和風モンスターシール', rarity: 'N', icon: '🐾' },
     lastSSR: { name: '月見猫又ぬいぐるみ', rarity: 'SSR', icon: '🐈', art: 'assets/tsukimi-nekomata.png' },
     lastSR: { name: '月鈴ナイトライト', rarity: 'SR', icon: '🔔' },
     lastR1: { name: '猫又しっぽブランケット', rarity: 'R', icon: '🧶' },
@@ -33,7 +33,7 @@
     lastN1: { name: '肉球和柄コースター', rarity: 'N', icon: '🐾' },
     lastN2: { name: '桜香る匂い袋', rarity: 'N', icon: '🌸' },
     lastN3: { name: '猫又絵巻カード', rarity: 'N', icon: '📜' },
-    lastBonus: { name: '黄金武者兜オブジェ', rarity: 'LAST', icon: '🏯' }
+    lastBonus: { name: '黄金狛犬ミニオブジェ', rarity: 'LAST', icon: '🦁' }
   };
 
   const missionRewards = { daily: 20, ad: 30, survey: 50, app: 40 };
@@ -460,6 +460,7 @@
 
   function executeDraw() {
     if (!canDraw()) return;
+    animatePulse(drawDialog, 'is-executing');
     drawLock = true; drawDialog.querySelector('.js-execute-draw').disabled = true;
     const config = campaigns[activeCampaignKey]; const current = state.campaigns[activeCampaignKey];
     const cost = selectedCount * config.cost; const transactionId = makeId('DR');
@@ -492,6 +493,7 @@
 
   function showResults(result) {
     clearTimeout(animationTimer); animationTimer = null; if (!result?.resultIds) return; drawLock = false;
+    animatePulse(drawDialog, 'is-reward');
     const counts = { SSR: 0, SR: 0, R: 0, N: 0 };
     result.resultIds.forEach(id => { counts[prizes[id].rarity] += 1; });
     drawDialog.querySelector('.js-result-count').textContent = formatNumber(result.count);
@@ -563,10 +565,24 @@
     document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close()); showToast('デモデータを初期状態に戻しました');
   }
 
-  document.querySelectorAll('[data-draw]').forEach(button => button.addEventListener('click', () => openDraw(button.dataset.campaign)));
+  function animatePulse(element, className) {
+    if (!element) return;
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+    window.setTimeout(() => element.classList.remove(className), 850);
+  }
+
+  document.querySelectorAll('[data-draw]').forEach(button => button.addEventListener('click', () => {
+    animatePulse(button, 'is-pressed');
+    animatePulse(button.closest('.gacha-card'), 'is-selected');
+    animatePulse(document.querySelector('.japanese-stage'), 'is-summoning');
+    openDraw(button.dataset.campaign);
+  }));
   drawDialog.querySelectorAll('input[name="draw-count"]').forEach(radio => radio.addEventListener('change', () => {
     selectedCount = Number(radio.value);
     drawDialog.querySelectorAll('.draw-option').forEach(label => label.classList.toggle('is-selected', label.contains(radio)));
+    animatePulse(radio.closest('.draw-option'), 'is-picked');
     updateDrawNumbers();
   }));
   drawDialog.querySelector('.js-confirm-draw').addEventListener('click', event => {
